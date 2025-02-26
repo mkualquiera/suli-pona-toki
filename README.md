@@ -9,6 +9,7 @@ suli pona toki is a dialect of toki pona inspired by Japanese sentence structure
 3. **The "no" Connector**: Creates possesive or attribute-holding grouping boundaries (similar to Japanese "の")
 4. **The "an-" Prefix**: Systematically creates opposites for any concept
 5. **The "lu-" Particle**: Provides a pragmatic layer for expressing the speaker's perspective. The literal meaning of the sentence stays the same, but the listener can infer the speaker's attitude or perspective on the information.
+6. **Subject-Object-Verb structure**: The verb is now the last element in the sentence. This allows more easily talking about multiple objects in a single sentence.
 
 Together, these changes create a more flexible language capable of greater precision and complexity while maintaining the core simplicity of toki pona's vocabulary.
 
@@ -43,6 +44,7 @@ Particles in suli pona toki are attached as suffixes to their associated content
 | -ki | Using/with | kepeken (use) | iloki = "with a tool" |
 | -lo | At/in/on | lon (at) | tomolo = "at the house" |
 | -la | Context marker | la (if/when) | monsi tenpola = "before..." |
+| -en | And | en (and) | mije jan en meli jan = "the man and the woman" |
 | -nu | Or/alternative | anu (or) | minu sina = "you or I" |
 | -lu | Discourse perspective marker; transforms phrases into adverbials or meta-commentary | lukin (to see) | taso lonlu = "but of course...", mi lonlu = "honestly", suli ponalu = "incredibly enough", kin nasinlu = "by the way"
  |
@@ -134,8 +136,7 @@ The "pi" particle creates a new semantic unit, where what follows it becomes the
 
 ### Advanced Modification with "no"
 
-The "no" particle can be thought of as turning the current deepest head into 
-an explanation, property, or tail for what is to come. This allows for complex semantic grouping:
+The "no" particle can be thought of as turning the current head into the nuance of a new head. This allows for complex semantic grouping:
 
 - `nasa telo pi ike jan pi suli tomo` = "((crazy water) (bad person)) (big structure)" = The mansion owned by a villain who is into making alcohol.
 - `nasa telo pi ike jan no suli tomo` = "(crazy water) ((bad person) (big structure))" = The big bar owned by the villain.

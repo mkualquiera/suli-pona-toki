@@ -1,0 +1,1357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <meta content="text/html; charset=UTF-8" name="Content-Type" />
+
+    <!-- OpenGraph tags for social media embeds -->
+    <meta property="og:title" content="suli pona toki">
+    <meta property="og:image" content="/suli-pona-toki/image.png">
+    <meta property="og:type" content="article">
+    <meta property="og:description"
+        content="A dialect of toki pona inspired by Japanese sentence structure and Forth-like stack-based processing.">
+    <meta property="og:url" content="https://mkualquiera.github.io/suli-pona-toki/">
+
+
+    <!-- Twitter Card tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="suli pona toki">
+    <meta name="twitter:image" content="https://mkualquiera.github.io/suli-pona-toki/image.png">
+    <meta name="twitter:description"
+        content="A dialect of toki pona inspired by Japanese sentence structure and Forth-like stack-based processing.">
+
+
+    <title>suli pona toki: A Comprehensive Visual Guide</title>
+    <style>
+        /* Base styles */
+        :root {
+            /* Refined color palette with richer, more subdued tones */
+            --suffix-bg: #e8e8f1;
+            --suffix-text: #2d2b5f;
+            --suffix-border: #9797d8;
+            --prefix-bg: #f5e9e9;
+            --prefix-text: #7a1c25;
+            --prefix-border: #d8a3a3;
+            --connector-bg: #f5f0e6;
+            --connector-text: #6b4a22;
+            --connector-border: #d1b978;
+            --subject-bg: #e8f2ed;
+            --subject-text: #1d4735;
+            --subject-border: #97c7b1;
+            --verb-bg: #e6eef5;
+            --verb-text: #1e4365;
+            --verb-border: #94b8d3;
+            --object-bg: #efe9f5;
+            --object-text: #4a2d6a;
+            --object-border: #c2add8;
+            --modifier-bg: #eef2e6;
+            --modifier-text: #3c4a29;
+            --modifier-border: #bbc99a;
+            --preposition-bg: #f2e6f1;
+            --preposition-text: #5e2e61;
+            --preposition-border: #d1a3d0;
+            --root-bg: #f1f1f3;
+            --root-text: #2d3142;
+            --root-border: #bdbecb;
+
+            /* Font variables */
+            --serif-font: "Libre Baskerville", "Baskerville", "Garamond", "Times New Roman", serif;
+            --sans-font: "Cormorant Garamond", "Palatino", "Book Antiqua", Georgia, serif;
+            --mono-font: "Courier Prime", "Courier New", monospace;
+        }
+
+        body {
+            font-family: var(--serif-font);
+            line-height: 1.6;
+            color: #2d3142;
+            background-color: #f8f8fa;
+            margin: 0;
+            padding: 0;
+            letter-spacing: 0.01em;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-image: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23e6e6e9' fill-opacity='0.4' fill-rule='evenodd'%3E%3Cpath d='M0 20L20 0h2L0 22zm0 18L18 0h-2L0 16zm36-18L20 20v2L38 0h2zM20 18L38 0h-2L18 2z'/%3E%3C/g%3E%3C/svg%3E");
+            border-left: 1px solid #e2e2e8;
+            border-right: 1px solid #e2e2e8;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Typography */
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-family: var(--sans-font);
+            font-weight: 600;
+            color: #1c1e2a;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.03em;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #1c1e2a;
+            margin-bottom: 1rem;
+            text-align: center;
+            border-bottom: 2px solid #d1b978;
+            padding-bottom: 0.5rem;
+            position: relative;
+        }
+
+        h1:after {
+            content: "";
+            display: block;
+            width: 60px;
+            height: 3px;
+            background-color: #d1b978;
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        h1 * {
+            font-size: 2.5rem !important;
+            color: #1c1e2a !important;
+            margin-bottom: 1rem !important;
+            text-align: center !important;
+            font-family: var(--sans-font) !important;
+            letter-spacing: 0.03em !important;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #1c1e2a;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #d1b978;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #2d3142;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+            padding: 2rem 1rem;
+            background-color: #f1f1f3;
+            border: 1px solid #d1d1dc;
+            border-radius: 4px;
+            position: relative;
+        }
+
+        .header:before {
+            content: "❧";
+            position: absolute;
+            top: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 1.5rem;
+            color: #d1b978;
+        }
+
+        .subtitle {
+            font-size: 1.4rem;
+            color: #4a4b57;
+            text-align: center;
+            font-style: italic;
+            letter-spacing: 0.02em;
+            margin-top: 0.5rem;
+        }
+
+        .quote {
+            background-color: #2d3142;
+            color: #f1f1f3;
+            padding: 1.5rem;
+            border-radius: 0.25rem 0.25rem 0 0;
+            font-style: italic;
+            border-left: 4px solid #d1b978;
+            font-family: var(--serif-font);
+            letter-spacing: 0.02em;
+            line-height: 1.8;
+        }
+
+        /* Components */
+        .card {
+            background-color: white;
+            border-radius: 0.25rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05), 0 2px 4px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            overflow: hidden;
+            border: 1px solid #e2e2e8;
+        }
+
+        .card-body {
+            padding: 1.8rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .card-light {
+            background-color: white;
+            border-radius: 0.25rem;
+            border: 1px solid #e2e2e8;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .card-light:before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background-color: #d1b978;
+            opacity: 0.6;
+        }
+
+        /* Tags */
+        .tag {
+            padding: 0.35rem 0.7rem;
+            border-radius: 0.2rem;
+            font-weight: 500;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin: 0.3rem;
+            border-width: 1px;
+            border-style: solid;
+            font-family: var(--sans-font);
+            letter-spacing: 0.03em;
+        }
+
+        .head {
+            border-radius: 0 0.8rem 0.8rem 0;
+            margin-left: 0;
+            position: relative;
+            padding-left: 0.9rem;
+        }
+
+        .tail {
+            border-radius: 0.8rem 0 0 0.8rem;
+            margin-right: 0;
+            position: relative;
+            padding-right: 0.9rem;
+        }
+
+        /* Tag colors remain the same but with updated variables */
+        .suffix {
+            background-color: var(--suffix-bg);
+            color: var(--suffix-text);
+            border-color: var(--suffix-border);
+        }
+
+        .prefix {
+            background-color: var(--prefix-bg);
+            color: var(--prefix-text);
+            border-color: var(--prefix-border);
+        }
+
+        .connector {
+            background-color: var(--connector-bg);
+            color: var(--connector-text);
+            border-color: var(--connector-border);
+        }
+
+        .subject {
+            background-color: var(--subject-bg);
+            color: var(--subject-text);
+            border-color: var(--subject-border);
+        }
+
+        .verb {
+            background-color: var(--verb-bg);
+            color: var(--verb-text);
+            border-color: var(--verb-border);
+        }
+
+        .object {
+            background-color: var(--object-bg);
+            color: var(--object-text);
+            border-color: var(--object-border);
+        }
+
+        .modifier {
+            background-color: var(--modifier-bg);
+            color: var(--modifier-text);
+            border-color: var(--modifier-border);
+        }
+
+        .preposition {
+            background-color: var(--preposition-bg);
+            color: var(--preposition-text);
+            border-color: var(--preposition-border);
+        }
+
+        .root {
+            background-color: var(--root-bg);
+            color: var(--root-text);
+            border-color: var(--root-border);
+        }
+
+        /* Examples */
+        .example {
+            background-color: white;
+            border-radius: 0.25rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.04);
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border: 1px solid #e2e2e8;
+            position: relative;
+        }
+
+        .example:before {
+            content: "§";
+            position: absolute;
+            top: 0.5rem;
+            left: 0.5rem;
+            font-size: 1rem;
+            color: #d1b978;
+            opacity: 0.7;
+        }
+
+        .explanation {
+            margin-top: 0.8rem;
+            color: #5a5d6e;
+            font-size: 0.95rem;
+            font-style: italic;
+            padding-left: 1rem;
+            border-left: 2px solid #d1b978;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            margin: 1.5rem 0;
+            font-size: 0.95rem;
+            border: 1px solid #d1d1dc;
+        }
+
+        th,
+        td {
+            border: 1px solid #d1d1dc;
+            padding: 0.9rem 1.2rem;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f1f1f3;
+            font-weight: 600;
+            color: #2d3142;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #d1d1dc;
+            margin-top: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.6rem 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-top-left-radius: 0.2rem;
+            border-top-right-radius: 0.2rem;
+            margin-right: 0.25rem;
+            font-family: var(--sans-font);
+            letter-spacing: 0.02em;
+            transition: all 0.2s ease;
+        }
+
+        .tab.active {
+            background-color: #2d3142;
+            color: white;
+            border: 1px solid #2d3142;
+            border-bottom: none;
+        }
+
+        .tab:not(.active) {
+            background-color: #f1f1f3;
+            color: #5a5d6e;
+            border: 1px solid #d1d1dc;
+            border-bottom: none;
+        }
+
+        .tab:not(.active):hover {
+            background-color: #e8e8ed;
+            color: #2d3142;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 1.8rem;
+            background-color: white;
+            border: 1px solid #d1d1dc;
+            border-top: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Structure diagram */
+        .structure-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px dotted #e2e2e8;
+            padding-bottom: 0.8rem;
+        }
+
+        .structure-label {
+            width: 8rem;
+            font-weight: 600;
+            color: #3c3e4a;
+            font-family: var(--sans-font);
+            letter-spacing: 0.02em;
+        }
+
+        .structure-components {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .optional {
+            margin-left: 0.8rem;
+            color: #7a7c89;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* Lists */
+        ul {
+            list-style-type: none;
+            padding-left: 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        ul li {
+            margin-bottom: 0.7rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        ul li:before {
+            content: "•";
+            color: #d1b978;
+            font-weight: bold;
+            display: inline-block;
+            width: 1rem;
+            margin-left: -1rem;
+            position: absolute;
+            left: 0;
+        }
+
+        .list-item {
+            margin-bottom: 0.8rem;
+            line-height: 1.6;
+        }
+
+        /* Additional Royal Academy Elements */
+        blockquote {
+            border-left: 4px solid #d1b978;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            background-color: #f8f8fa;
+            font-style: italic;
+            color: #3c3e4a;
+        }
+
+        blockquote footer {
+            margin-top: 0.5rem;
+            color: #7a7c89;
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        blockquote footer:before {
+            content: "— ";
+        }
+
+        .footnote {
+            font-size: 0.85rem;
+            color: #5a5d6e;
+            border-top: 1px solid #e2e2e8;
+            margin-top: 2rem;
+            padding-top: 1rem;
+        }
+
+        .definition {
+            background-color: #f1f1f3;
+            border: 1px solid #d1d1dc;
+            border-radius: 0.25rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .definition dt {
+            font-weight: 600;
+            font-family: var(--sans-font);
+            margin-bottom: 0.5rem;
+            color: #2d3142;
+        }
+
+        .definition dd {
+            margin-left: 0;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Decorative elements */
+        .chapter-divider {
+            text-align: center;
+            margin: 2rem 0;
+            font-size: 1.5rem;
+            color: #d1b978;
+        }
+
+        .chapter-divider:before {
+            content: "✦ ✦ ✦";
+            letter-spacing: 0.5rem;
+        }
+
+        .initial-cap {
+            font-size: 3.5rem;
+            float: left;
+            line-height: 1;
+            margin-right: 0.25rem;
+            margin-top: 0.1rem;
+            color: #2d3142;
+            font-family: var(--sans-font);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+
+            .grid,
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+
+            .structure-row {
+                flex-direction: column;
+                align-items: flex-start;
+                margin-bottom: 1.5rem;
+            }
+
+            .structure-label {
+                margin-bottom: 0.5rem;
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 2.2rem;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Print styles for the scholarly look */
+        @media print {
+            body {
+                font-size: 12pt;
+                color: black;
+                background: white;
+            }
+
+            .container {
+                width: 100%;
+                max-width: none;
+                margin: 0;
+                padding: 0;
+                background: none;
+                border: none;
+                box-shadow: none;
+            }
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
+
+            h1,
+            h2,
+            h3 {
+                page-break-after: avoid;
+            }
+
+            table,
+            figure {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><span class="tag tail modifier">suli</span><span class="tag head root"><span
+                        class="tag tail modifier">pona</span><span class="tag head root">toki</span></span></h1>
+            <p class="subtitle">A Comprehensive Visual Guide</p>
+        </div>
+
+        <div class="card">
+            <div class="quote">
+                "A dialect of toki pona inspired by Japanese sentence structure and Forth-like stack-based processing."
+            </div>
+
+            <div class="tabs">
+                <div class="tab active" data-tab="overview">Overview</div>
+                <div class="tab" data-tab="grammar">Grammar</div>
+                <div class="tab" data-tab="modifiers">Modifiers</div>
+                <div class="tab" data-tab="prefix">an- Prefix</div>
+                <div class="tab" data-tab="lu">-lu Marker</div>
+            </div>
+
+            <div class="tab-content active" id="overview">
+                <h2>Overview</h2>
+                <p>
+                    <span class="font-semibold">suli pona toki</span> is a dialect of toki pona inspired by Japanese
+                    sentence structure and Forth-like stack-based processing. It introduces several significant
+                    structural
+                    changes while maintaining toki pona's vocabulary and philosophical simplicity.
+                </p>
+
+                <div class="grid">
+                    <div class="card-light">
+                        <h3>Key Innovations</h3>
+                        <ul>
+                            <li><strong>Particle-Based Grammar:</strong> All grammatical functions are expressed through
+                                suffix particles</li>
+                            <li><strong>Head-Final Structure:</strong> Modifiers precede the words they modify</li>
+                            <li><strong>The "no" Connector:</strong> Creates possesive or attribute-holding grouping
+                            </li>
+                            <li><strong>The "an-" Prefix:</strong> Systematically creates opposites</li>
+                            <li><strong>The "lu-" Particle:</strong> Provides a pragmatic layer for expressing the
+                                speaker's perspective</li>
+                            <li><strong>Subject-Object-Verb structure:</strong> Allows more easily talking about
+                                multiple objects in a single sentence.</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-light">
+                        <h3>Color Code Legend</h3>
+                        <div class="list-item">
+                            <span class="tag tail modifier">tail</span><span class="tag head root">head</span>
+                            <span>Content building blocks</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="tag suffix">-su, -pa, -jo, etc.</span>
+                            <span>Grammatical suffixes</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="tag prefix">an-pona</span>
+                            <span>Prefix modifiers</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="tag connector">pi, no, -en, -nu</span>
+                            <span>Semantic connectors</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="tag subject">jansu</span>
+                            <span>Subject</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="tag verb">tawapa</span>
+                            <span>Verb/Action</span>
+                        </div>
+                        <div class="list-item">
+                            <span class="tag object">tomojo</span>
+                            <span>Object</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="grammar">
+                <h2>Grammatical Particles</h2>
+                <p>
+                    Particles in suli pona toki are attached as suffixes to their associated content words:
+                </p>
+
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Suffix</th>
+                                <th>Function</th>
+                                <th>Original Word</th>
+                                <th>Example</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag suffix">-su</span></td>
+                                <td>Subject marker</td>
+                                <td>suli (important)</td>
+                                <td><span class="tag subject">jansu</span> = "person (as subject)"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-pa</span></td>
+                                <td>Verb/action marker</td>
+                                <td>pali (do/work)</td>
+                                <td><span class="tag verb">tawapa</span> = "go (as action)"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-jo</span></td>
+                                <td>Object marker</td>
+                                <td>jo (have)</td>
+                                <td><span class="tag object">tomojo</span> = "house (as object)"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-ta</span></td>
+                                <td>To/toward</td>
+                                <td>tawa (to/toward)</td>
+                                <td><span class="tag preposition">tomota</span> = "to the house"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-na</span></td>
+                                <td>From/because</td>
+                                <td>tan (from)</td>
+                                <td><span class="tag preposition">tomona</span> = "from the house"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-ki</span></td>
+                                <td>Using/with</td>
+                                <td>kepeken (use)</td>
+                                <td><span class="tag preposition">iloki</span> = "with a tool"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-lo</span></td>
+                                <td>At/in/on</td>
+                                <td>lon (at)</td>
+                                <td><span class="tag preposition">tomolo</span> = "at the house"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-la</span></td>
+                                <td>Context marker</td>
+                                <td>la (if/when)</td>
+                                <td><span class="tag preposition">monsi tenpola</span> = "before..."</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-en</span></td>
+                                <td>And</td>
+                                <td>en (and)</td>
+                                <td><span class="tag connector"><span class="tag tail modifier">mije</span><span
+                                            class="tag head root">jan</span> en <span
+                                            class="tag tail modifier">meli</span><span
+                                            class="tag head root">jan</span></span> = "the man and the woman"
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-nu</span></td>
+                                <td>Or/alternative</td>
+                                <td>anu (or)</td>
+                                <td><span class="tag connector"><span class="tag head root">mi</span> nu <span
+                                            class="tag head root">sina</span></span> = "you or I"</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag suffix">-lu</span></td>
+                                <td>Meta-commentary
+                                </td>
+                                <td>lukin (to see)</td>
+                                <td><span class="tag preposition"><span class="tag tail modifier">taso</span><span
+                                            class="tag head root">lon</span>lu</span> = "but of course...",</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Basic Sentence Structure</h3>
+                <div class="card-light">
+                    <div>
+                        <div class="structure-row">
+                            <div class="structure-label">Context:</div>
+                            <div class="structure-components">
+                                <span class="tag preposition"><span class="tag root">context
+                                        sentence</span>-la</span>
+                                <span class="optional">(optional)</span>
+                            </div>
+                        </div>
+
+                        <div class="structure-row">
+                            <div class="structure-label">Subject:</div>
+                            <div class="structure-components">
+                                <span class="tag subject">
+                                    <span class="tag preposition">
+                                        preposition
+                                        <span class="optional">
+                                            (optional)
+                                        </span>
+                                    </span>
+                                    <span class="tag tail modifier">modifiers</span><span
+                                        class="tag head root">subject</span>
+                                    -su
+                                </span>
+                                <span class="optional">(optional)</span>
+                            </div>
+                        </div>
+
+                        <div class="structure-row">
+                            <div class="structure-label">Object:</div>
+                            <div class="structure-components">
+                                <span class="tag object">
+                                    <span class="tag preposition">
+                                        preposition
+                                        <span class="optional">
+                                            (optional)
+                                        </span>
+                                    </span>
+                                    <span class="tag tail modifier">modifiers</span><span
+                                        class="tag head root">object</span>
+                                    -jo
+                                </span>
+                            </div>
+                            <span class="optional">(optional)</span>
+                        </div>
+
+                        <div class="structure-row">
+                            <div class="structure-label">Verb:</div>
+                            <div class="structure-components">
+                                <span class="tag verb">
+                                    <span class="tag preposition">
+                                        preposition
+                                        <span class="optional">
+                                            (optional)
+                                        </span>
+                                    </span>
+                                    <span class="tag tail modifier">modifiers</span><span
+                                        class="tag head root">verb</span>
+                                    -pa
+                                </span>
+                            </div>
+                            <span class="optional">(optional)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <h3>Example Sentences</h3>
+
+                <div class="example">
+                    <div>
+                        <span class="tag subject">
+                            <span class="tag tail modifier">pona</span><span class="tag head root">jan</span>
+                            su
+                        </span>
+                        <span class="tag verb">
+                            <span class="tag preposition">
+                                <span class="tag head root">lape</span>
+                                ki
+                            </span>
+                            <span class="tag preposition">
+                                <span class="tag head root">tomo</span>
+                                ta
+                            </span>
+                            <span class="tag head root">tawa</span>
+                            pa
+                        </span>
+                    </div>
+                    <div class="explanation">The good person walks sleepily to the house.</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        <span class="tag subject">
+                            <span class="tag tail modifier">tonsi</span><span class="tag head root">jan</span>
+                            su
+                        </span>
+                        <span class="tag object">
+                            <span class="tag tail modifier">sina</span><span class="tag head root">tomo</span>
+                            jo
+                        </span>
+                        <span class="tag verb">
+                            <span class="tag preposition">
+                                <span class="tag tail modifier">mi</span><span class="tag head root">lon</span>
+                                lu
+                            </span>
+                            <span class="tag head root">pona</span>
+                            pa
+                        </span>
+                    </div>
+                    <div class="explanation">The non-binary person, honestly, improves your house.</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        <div>
+                            <span class="tag subject">
+                                <span class="tag preposition">
+                                    <span class="tag tail modifier">telo</span><span class="tag head root">tomo</span>
+                                    lo
+                                </span>
+                                <span class="tag head root">jan</span>
+                                su
+                            </span>
+                            <span class="tag object">
+                                <span class="tag head root">leko</span>
+                                jo
+                            </span>
+                            <span class="tag verb">
+                                <span class="tag head root">tawa</span>
+                                pa
+                            </span>
+                        </div>
+                    </div>
+                    <div class="explanation">The person at the wet house moves the box.</div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="modifiers">
+                <h2>Modifier Structure</h2>
+                <p>
+                    suli pona toki uses a head-final <span class="tag tail modifier">tail</span><span
+                        class="tag head root">head</span> structure where modifiers (tail) precede the words they modify
+                    (head),
+                    and provides advanced ways to group concepts.
+                </p>
+
+                <h3>Simple Modification</h3>
+                <p>Modifiers precede the words they modify:</p>
+
+                <div class="example">
+                    <div>
+                        <span class="tag tail modifier">nasa</span><span class="tag head root">telo</span>
+                    </div>
+                    <div class="explanation">crazy water = alcohol</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        <span class="tag tail modifier">palisa</span><span class="tag head root"><span
+                                class="tag tail modifier">sitelen</span><span class="tag head root">ilo</span></span>
+                    </div>
+                    <div class="explanation">stick-like drawing tool = a pen</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        <span class="tag tail modifier">sina</span><span class="tag head root"><span
+                                class="tag tail modifier">suli</span><span class="tag head root"><span
+                                    class="tag tail modifier">mun</span><span class="tag head root"><span
+                                        class="tag tail modifier">luka</span><span
+                                        class="tag head root">linja</span></span></span></span>
+                    </div>
+                    <div class="explanation">yours great celestial arm line = (the big celestial line-shaped arm) of
+                        yours
+                    </div>
+                </div>
+
+                <h3>Modification with "pi"</h3>
+                <p>
+                    The "pi" particle creates a new semantic unit, where what follows it becomes the "core" concept,
+                    and what precedes it becomes a modifier:
+                </p>
+
+                <div class="example">
+                    <div>
+                        <span class="tag tail connector">
+                            <span class="tag tail modifier">
+                                sina
+                            </span>
+                            <span class="tag head root">
+                                <span class="tag tail modifier">
+                                    pona
+                                </span>
+                                <span class="tag head root">
+                                    jan
+                                </span>
+                            </span>
+                            pi
+                        </span>
+                        <span class="tag head root">
+                            <span class="tag tail modifier">
+                                sitelen
+                            </span>
+                            <span class="tag head root">
+                                ilo
+                            </span>
+                        </span>
+                    </div>
+                    <div class="explanation">yours good person -> writing tool = the pen that your friend owns</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        <span class="tag tail connector">
+                            <span class="tag tail connector">
+                                <span class="tag tail modifier">
+                                    sina
+                                </span>
+                                <span class="tag head root">
+                                    <span class="tag tail modifier">
+                                        pona
+                                    </span>
+                                    <span class="tag head root">
+                                        jan
+                                    </span>
+                                </span>
+                                pi
+                            </span>
+                            <span class="tag head root">
+                                <span class="tag tail modifier">
+                                    sitelen
+                                </span>
+                                <span class="tag head root">
+                                    ilo
+                                </span>
+                            </span>
+                            pi
+                        </span>
+                        <span class="tag head root">
+                            <span class="tag tail modifier">
+                                lukin
+                            </span>
+                            <span class="tag head root">
+                                pona
+                            </span>
+                        </span>
+                    </div>
+                    <div class="explanation">(yours good person -> writing tool) -> looking good = the good looking
+                        quality of your
+                        friend's pen</div>
+                </div>
+
+                <h3>Advanced Modification with "no"</h3>
+                <p>
+                    The "no" particle can be thought of as turning the current deepest head into
+                    an explanation, property, or tail for what is to come. Consider the following pi-examples:
+                </p>
+
+                <div class="example">
+                    <div class="card-light">
+                        <div>
+                            <span class="tag tail connector">
+                                <span class="tag head root">
+                                    <span class="tag tail modifier">
+                                        nasa
+                                    </span>
+                                    <span class="tag head root">
+                                        telo
+                                    </span>
+                                </span>
+                                pi
+                            </span>
+                            <span class="tag head root">
+                                <span class="tag tail modifier">
+                                    ike
+                                </span>
+                                <span class="tag head root">
+                                    jan
+                                </span>
+                            </span>
+                        </div>
+                        <div class="explanation">crazy water -> bad person = The villain who is known for brewing
+                            alcohol</div>
+                    </div>
+                </div>
+
+                <div class="example">
+                    <div class="card-light">
+                        <div>
+                            <span class="tag tail connector">
+                                <span class="tag tail connector">
+                                    <span class="tag head root">
+                                        <span class="tag tail modifier">
+                                            nasa
+                                        </span>
+                                        <span class="tag head root">
+                                            telo
+                                        </span>
+                                    </span>
+                                    pi
+                                </span>
+                                <span class="tag head root">
+                                    <span class="tag tail modifier">
+                                        ike
+                                    </span>
+                                    <span class="tag head root">
+                                        jan
+                                    </span>
+                                </span>
+                                pi
+                            </span>
+                            <span class="tag head root">
+                                <span class="tag tail modifier">
+                                    suli
+                                </span>
+                                <span class="tag head root">
+                                    telo
+                                </span>
+                            </span>
+                        </div>
+                        <div class="explanation">(crazy water -> bad person) -> big house= The mansion owned by the
+                            villain who is known for brewing alcohol</div>
+                    </div>
+                </div>
+
+                <p>
+                    In the first example, the semantic head is "ike jan", and the tail is "nasa telo". This means that
+                    we are specifically talking about a bad person. However, what if we were not talking about said bad
+                    person, but instead about something they own or some property of theirs? This is where the "no"
+                    particle comes in:
+                </p>
+
+                <div class="example">
+                    <div class="card-light">
+                        <div>
+                            <span class="tag tail connector">
+                                <span class="tag head root">
+                                    <span class="tag tail modifier">
+                                        nasa
+                                    </span>
+                                    <span class="tag head root">
+                                        telo
+                                    </span>
+                                </span>
+                                pi
+                            </span>
+                            <span class="tag head root">
+                                <span class="tag tail modifier">
+                                    <span class="tag tail modifier">
+                                        ike
+                                    </span>
+                                    <span class="tag head root">
+                                        jan
+                                    </span>
+                                </span>
+                                <span class="tag head connector">
+                                    no
+                                    <span class="tag tail modifier">
+                                        suli
+                                    </span>
+                                    <span class="tag head root">
+                                        tomo
+                                    </span>
+                                </span>
+                            </span>
+                        </div>
+                        <div class="explanation">crazy water -> (bad person -> big house) = The villain who is known for
+                            brewing
+                            alcohol</div>
+                    </div>
+
+                    <p>For precise parsing logic, please consider the reference <a class="prefix"
+                            href="https://github.com/mkualquiera/suli-pona-toki/blob/main/ParseContent.hs">Haskell
+                            implementation</a>.</p>
+                </div>
+            </div>
+
+            <div class="tab-content" id="prefix">
+                <h2>The "an-" Prefix System</h2>
+                <p>
+                    The "an-" prefix can be attached to any content word to express its conceptual opposite.
+                    Unlike simple negation with "ala", the "an-" prefix creates a true opposite concept.
+                </p>
+
+                <div style="overflow-x: auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Original</th>
+                                <th>With "an-"</th>
+                                <th>Standard toki pona Equivalent</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><span class="tag root">pona</span> (good)</td>
+                                <td><span class="tag prefix">an-pona</span></td>
+                                <td>ike (bad)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag root">suli</span> (big)</td>
+                                <td><span class="tag prefix">an-suli</span></td>
+                                <td>lili (small)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag root">moli</span> (death)</td>
+                                <td><span class="tag prefix">an-moli</span></td>
+                                <td>lon (existence)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag root">open</span> (open)</td>
+                                <td><span class="tag prefix">an-open</span></td>
+                                <td>pini (close/end)</td>
+                            </tr>
+                            <tr>
+                                <td><span class="tag root">wawa</span> (strong)</td>
+                                <td><span class="tag prefix">an-wawa</span></td>
+                                <td>wawa ala (not strong)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h3>Example Usage</h3>
+
+                <div class="example">
+                    <div>
+                        <span class="tag prefix">anpona</span>
+                        jansu
+                        <span class="tag prefix">ansuli</span>
+                        tomojo
+                        pakalapa
+                    </div>
+                    <div class="explanation">The bad person destroys the small house.</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        mi lonlu
+                        <span class="tag prefix">ansona</span>
+                        jansu
+                        wawa
+                        kepekipa
+                        <span class="tag prefix">anwawa</span>
+                        iloki
+                    </div>
+                    <div class="explanation">Honestly, the ignorant person strongly uses a weak tool.</div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="lu">
+                <h2>The "-lu" Perspective Marker</h2>
+                <p>
+                    The "-lu" suffix transforms phrases into discourse markers and adverbials that express
+                    the speaker's perspective or attitude toward what's being said. It creates meta-commentary
+                    without requiring additional vocabulary.
+                </p>
+
+                <h3>Types of "-lu" Expressions</h3>
+
+                <div class="grid-2">
+                    <div class="card-light">
+                        <h4>Discourse connectors</h4>
+                        <ul>
+                            <li><span class="tag suffix">taso lonlu</span> = "but of course..."</li>
+                            <li><span class="tag suffix">ante nasinlu</span> = "anyway..."</li>
+                            <li><span class="tag suffix">taso kenlu</span> = "but also..."</li>
+                        </ul>
+                    </div>
+
+                    <div class="card-light">
+                        <h4>Speaker attitude markers</h4>
+                        <ul>
+                            <li><span class="tag suffix">mi lonlu</span> = "honestly" (lit: "from my truth")
+                            </li>
+                            <li><span class="tag suffix">suli ponalu</span> = "Amazingly" (lit: "from a greatly
+                                good perspective")</li>
+                            <li><span class="tag suffix">kin nasinlu</span> = "by the way" (lit: "also from this path
+                                perspective")</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3>Example Sentences</h3>
+
+                <div class="example">
+                    <div>
+                        <span class="tag suffix">mi lonlu</span>
+                        ni musisu anponapa
+                    </div>
+                    <div class="explanation">Honestly, this game is not good.</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        <span class="tag suffix">taso kenlu</span>
+                        misu
+                        awen
+                        tawapa
+                        tomota
+                    </div>
+                    <div class="explanation">But also, I will continue going to the house.</div>
+                </div>
+
+                <div class="example">
+                    <div>
+                        <span class="tag suffix">suli ponalu</span>
+                        ni tenposu ponapa mute janta
+                    </div>
+                    <div class="explanation">Amazingly, many people feel good about this time. (lit. 'this time is good
+                        for many people')</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simple tab functionality
+        document.addEventListener('DOMContentLoaded', function () {
+            const tabs = document.querySelectorAll('.tab');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function () {
+                    // Hide all tab contents
+                    document.querySelectorAll('.tab-content').forEach(content => {
+                        content.classList.remove('active');
+                    });
+
+                    // Deactivate all tabs
+                    tabs.forEach(t => {
+                        t.classList.remove('active');
+                    });
+
+                    // Activate clicked tab
+                    this.classList.add('active');
+
+                    // Show corresponding content
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
