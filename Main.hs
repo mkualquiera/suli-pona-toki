@@ -45,14 +45,14 @@ resetColor = putStr resetCode
 
 -- Print token with appropriate color
 printToken :: Token -> IO ()
-printToken (PlainToken str) = do
+printToken (PlainToken str line column) = do
     colorPlainToken
-    putStr str
+    putStr $ str ++ "(" ++ show line ++ "," ++ show column ++ ")"
     resetColor
     putStr " "
-printToken (PunctuationToken str) = do
+printToken (PunctuationToken str line column) = do
     colorPunctuationToken
-    putStr str
+    putStr $ str ++ "(" ++ show line ++ "," ++ show column ++ ")"
     resetColor
     putStr " "
 

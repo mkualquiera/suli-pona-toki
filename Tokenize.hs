@@ -20,12 +20,12 @@ data TokenizationState = TokenizationState {
 
 commitFromPunctuation :: TokenizationState -> [ Token ] -> TokenizationState
 commitFromPunctuation (TokenizationState buffer tokens u l o) extraTokens =
-    TokenizationState "" (tokens ++ [PlainToken buffer l o] ++ extraTokens) (u + 1) l (o + 1)
+    TokenizationState "" (tokens ++ (if null buffer then [] else [PlainToken buffer l o]) ++ extraTokens) (u + 1) l (o + 1)
 
 commitFromSpace :: TokenizationState -> TokenizationState
 commitFromSpace (TokenizationState buffer tokens u l o) 
     | null buffer = TokenizationState "" tokens (u + 1) l (o + 1)
-    | otherwise = TokenizationState "" (tokens ++ [PlainToken buffer l (o - (length buffer))]) (u + 1) l (o + 1)
+    | otherwise = TokenizationState "" (tokens ++ [PlainToken buffer l (o)]) (u + 1) l (o + 1)
 
 commitFromNewline :: TokenizationState -> TokenizationState
 commitFromNewline (TokenizationState buffer tokens u l o) 
@@ -49,27 +49,35 @@ tokenizeInto state@(TokenizationState buffer tokens u l o) c
 tokenizeStringInto :: TokenizationState -> String -> TokenizationState
 tokenizeStringInto state str = foldl tokenizeInto state str
 
-grabFeaturedWord :: String -> FeaturedWord
-grabFeaturedWord word = 
+grabFeaturedWord :: String -> Int -> Int -> FeaturedWord
+grabFeaturedWord word l o = 
     case Map.lookup word conceptMap of
         Just featuredWord -> featuredWord
-        Nothing -> error ("Unknown word: >" ++ word ++ "<")
+        Nothing -> error ("Unknown word: >" ++ word ++ "< at line " ++ show l ++ " at offset " ++ show o)
 
 emitAffixes :: Token -> [Token]
 emitAffixes (PlainToken value l o) = 
-    let (FeaturedWord word prefix suffix sufsuffix) = grabFeaturedWord value
+    let (FeaturedWord word prefix suffix sufsuffix) = grabFeaturedWord value l o
         prefixLength = maybe 0 length prefix
         suffixLength = maybe 0 length suffix
         sufsuffixLength = maybe 0 length sufsuffix
         wordLength = length word
-        sufsuffixOffset = o - sufsuffixLength
-        suffixOffset = sufsuffixOffset - suffixLength
-        wordOffset = suffixOffset - wordLength
-        prefixOffset = wordOffset - prefixLength
-        prefixToken = maybe [] (\x -> [ PlainToken x l (o - prefixOffset) ]) prefix
-        suffixToken = maybe [] (\x -> [ PlainToken x l (o - suffixOffset) ]) suffix
-        sufsuffixToken = maybe [] (\x -> [ PlainToken x l (o - sufsuffixOffset) ]) sufsuffix
-    in prefixToken ++ [ PlainToken word l (o - wordLength) ] ++ suffixToken ++ sufsuffixToken
+        
+        -- Calculate start position (offset is the end position)
+        startPos = o - length value
+        
+        -- Calculate positions for each component
+        prefixPos = startPos
+        wordPos = prefixPos + prefixLength
+        suffixPos = wordPos + wordLength
+        sufsuffixPos = suffixPos + suffixLength
+        
+        -- Create tokens for each component if they exist
+        prefixToken = maybe [] (\x -> [ PlainToken x l prefixPos ]) prefix
+        wordToken = [ PlainToken word l wordPos ]
+        suffixToken = maybe [] (\x -> [ PlainToken x l suffixPos ]) suffix
+        sufsuffixToken = maybe [] (\x -> [ PlainToken x l sufsuffixPos ]) sufsuffix
+    in prefixToken ++ wordToken ++ suffixToken ++ sufsuffixToken
 
 emitAffixes token = [ token ]
 
