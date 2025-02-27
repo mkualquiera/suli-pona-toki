@@ -25,6 +25,10 @@ commitFromSpace (TokenizationState buffer tokens u)
     | null buffer = TokenizationState "" tokens (u + 1)
     | otherwise = TokenizationState "" (tokens ++ [PlainToken buffer]) (u + 1)
 
+commitFromNewline :: TokenizationState -> TokenizationState
+commitFromNewline (TokenizationState buffer tokens u) 
+    = TokenizationState "" (tokens ++ [PunctuationToken "\n"]) (u + 1)
+
 addCharacter :: TokenizationState -> Char -> TokenizationState
 addCharacter (TokenizationState buffer tokens u) c 
     = TokenizationState (buffer ++ [c]) tokens (u + 1)
@@ -36,7 +40,7 @@ tokenizeInto state@(TokenizationState buffer tokens u) c
     | c `elem` [' ', '\t'] = commitFromSpace state
     | c == '\n' = 
         if null buffer
-        then commitFromSpace state
+        then commitFromNewline state
         else error ("Unexpected newline character at " ++ show u)
     | otherwise = addCharacter state c
 
@@ -62,6 +66,14 @@ emitAffixes token = [ token ]
 withAffixes :: [Token] -> [Token]
 withAffixes tokens = concatMap emitAffixes tokens
 
+validate :: [Token] -> [Token]
+validate tokens = map check tokens
+    where 
+        check (PlainToken "") = error "Empty plain token"
+        check (PunctuationToken "") = error "Empty punctuation token"
+        check (PlainToken value) = PlainToken value
+        check (PunctuationToken value) = PunctuationToken value
+
 tokenizeString :: String -> [Token]
-tokenizeString str = withAffixes $ tokens $ tokenizeStringInto (TokenizationState "" [] 0) str
+tokenizeString str = validate $ withAffixes $ tokens $ tokenizeStringInto (TokenizationState "" [] 0) str
 
