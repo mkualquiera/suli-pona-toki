@@ -60,3 +60,13 @@ instance ToHTML Sentence where
         (case apposition of
             Nothing -> ""
             Just a -> "<Apposition>" ++ renderHTML a ++ "</Apposition>") 
+
+instance {-# OVERLAPPING #-} RenderHTML ParagraphElement where
+    renderHTML (SentenceElement s) = renderHTML s
+    renderHTML LineBreak = "<br />"
+
+instance {-# OVERLAPPING #-} RenderHTML Paragraph where
+    renderHTML (Paragraph {paragraphElements=p}) = "<p>" ++ (renderHTML p) ++ "</p>"
+
+instance ToHTML Document where
+    innerContent (Document {paragraphs=ps}) = renderHTML ps

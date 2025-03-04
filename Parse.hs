@@ -81,10 +81,29 @@ emptySentence = Sentence {
     remainder = []
 } 
 
-type Paragraph = [ Sentence ]
+data ParagraphElement = SentenceElement Sentence | LineBreak deriving (Show)
 
-type Document = [ Paragraph ]
+data Paragraph = Paragraph {
+    paragraphElements :: [ ParagraphElement ],
+    paragraphRemainder :: [ Token ]
+} deriving (Show)
 
+emptyParagraph :: Paragraph
+emptyParagraph = Paragraph {
+    paragraphElements = [],
+    paragraphRemainder = []
+}
+
+data Document = Document {
+    paragraphs :: [ Paragraph ],
+    documentRemainder :: [ Token ]
+} deriving (Show)
+
+emptyDocument :: Document
+emptyDocument = Document {
+    paragraphs = [],
+    documentRemainder = []
+}
 
 tokenToPrepositionType :: Token -> Maybe PrepositionType
 tokenToPrepositionType (PlainToken "ta" _ _) = Just Direction
@@ -200,7 +219,7 @@ parseTokensInto sentence@Sentence{subject=Nothing} (token@(PlainToken "su" _ _)
     }
 
 parseTokensInto sentence@Sentence{subject=Just _} (token@(PlainToken "su" _ _) 
-    : _) = error ("Multiple subjects in sentence: " ++ show sentence)
+    : _) = error ("Syntax error: multiple subjects in sentence: " ++ show sentence)
     
 parseTokensInto sentence (token@(PlainToken "pa" _ _) : tokens) = 
     parseTokensInto sentence' tokens
@@ -222,8 +241,102 @@ parseTokensInto sentence (token : tokens) =
     parseTokensInto (parseTokenInto sentence token) tokens
 
 
-parseTokens :: [Token] -> Sentence
-parseTokens = parseTokensInto emptySentence
+maybeLast :: [a] -> Maybe a
+maybeLast [] = Nothing
+maybeLast [x] = Just x
+maybeLast (_:xs) = maybeLast xs
 
-parseString :: String -> Sentence
-parseString string = parseTokens $ tokenizeString string
+parseTokensIntoParagraph :: Paragraph -> [Token] -> Paragraph
+
+parseTokensIntoParagraph paragraph@(Paragraph {paragraphElements = []}) (PunctuationToken "\n" _ _ : tokens) = error ("Unexpected newline character")
+parseTokensIntoParagraph paragraph (PunctuationToken "\n" _ _ : tokens) 
+    -- error if the last element is a line break
+    | LineBreak <- lastElement = error ("Syntax error: two line breaks in a row")
+    | otherwise = parseTokensIntoParagraph paragraph' tokens
+    where
+        paragraph' = paragraph {
+            paragraphElements = (paragraphElements paragraph) ++ [LineBreak]
+        }
+        lastElement = last $ paragraphElements paragraph
+
+parseTokensIntoParagraph paragraph@(Paragraph {paragraphRemainder = []}) (PunctuationToken "." _ _ : tokens) = error ("Unexpected period character")
+parseTokensIntoParagraph paragraph (PunctuationToken "." _ _ : tokens)
+    -- error if the last element is a line break and the remainder is empty
+    | Just LineBreak <- lastElement, null (paragraphRemainder paragraph) = error ("Syntax error: unexpected period character")
+    | otherwise = parseTokensIntoParagraph paragraph' tokens
+    where
+        paragraph' = paragraph {
+            paragraphElements = (paragraphElements paragraph) ++ [newSentence],
+            paragraphRemainder = []
+        }
+        newSentence = SentenceElement $ parseTokensInto emptySentence 
+            (paragraphRemainder paragraph)
+        lastElement = maybeLast $ paragraphElements paragraph
+
+parseTokensIntoParagraph paragraph (token : tokens) =
+    parseTokensIntoParagraph paragraph' tokens
+    where
+        paragraph' = paragraph {
+            paragraphRemainder = paragraphRemainder paragraph ++ [token]
+        }
+
+parseTokensIntoParagraph paragraph [] = paragraph
+
+commitParagraph :: Document -> Document
+commitParagraph Document{documentRemainder=[]} 
+    = error ("Syntax error: tried to commit empty paragraph")
+commitParagraph document = document {
+    paragraphs = paragraphs document ++ [trimmedParagraph],
+    documentRemainder = []
+}
+  where
+    newParagraph = parseTokensIntoParagraph emptyParagraph (documentRemainder document)
+    trimmedParagraph
+        | LineBreak <- lastElement = newParagraph { 
+                paragraphElements = init $ paragraphElements newParagraph 
+            }
+        | otherwise = newParagraph  
+    lastElement = last $ paragraphElements newParagraph
+
+-- Close document is like commitParagraph but it doesn't care if the remainder is empty
+closeDocument :: Document -> Document
+closeDocument document 
+    | null (documentRemainder document) = document
+    | otherwise = commitParagraph document
+
+parseTokensIntoDocument :: Document -> [Token] -> Document
+parseTokensIntoDocument document [] = document
+parseTokensIntoDocument document@(Document{paragraphs=[], documentRemainder=[]}) 
+    (PunctuationToken "\n" _ _ : tokens) = error ("Unexpected newline character")
+
+parseTokensIntoDocument document (tok@(PunctuationToken "\n" _ _) : tokens) 
+    | Just (PunctuationToken "\n" _ _) <- lastToken = 
+        parseTokensIntoDocument (commitParagraph document) tokens
+    | otherwise = parseTokensIntoDocument document' tokens
+  where 
+    lastToken = maybeLast (documentRemainder document)
+    document' = document {
+        documentRemainder = (documentRemainder document) ++ [tok]
+    }
+
+parseTokensIntoDocument document (tok : tokens) =
+    parseTokensIntoDocument document' tokens
+    where
+        document' = document {
+            documentRemainder = documentRemainder document ++ [tok]
+        }
+ 
+--parseTokens :: [Token] -> Sentence
+--parseTokens = parseTokensInto emptySentence
+
+-- parseTokens :: [Token] -> Paragraph
+-- parseTokens = parseTokensIntoParagraph emptyParagraph
+
+parseTokens :: [Token] -> Document
+parseTokens = parseTokensIntoDocument emptyDocument
+
+--parseString :: String -> Sentence
+--parseString string = parseTokens $ tokenizeString string
+
+parseString :: String -> Document
+parseString string = closeDocument $ parseTokens $ tokenizeString string
