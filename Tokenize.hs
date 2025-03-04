@@ -6,6 +6,7 @@ import qualified Data.Map as Map
 data Token =
     PlainToken String Int Int
     | PunctuationToken String Int Int
+    | CommentToken String Int Int
     deriving (Show, Eq)
 
 data TokenizationState = TokenizationState {
@@ -37,7 +38,7 @@ addCharacter (TokenizationState buffer tokens u l o) c
 
 tokenizeInto :: TokenizationState -> Char -> TokenizationState
 tokenizeInto state@(TokenizationState buffer tokens u l o) c
-    | c `elem` ['.', ':', ','] 
+    | c `elem` ['.', ':'] 
         = commitFromPunctuation state [ PunctuationToken [c] l o ]
     | c `elem` [' ', '\t'] = commitFromSpace state
     | c == '\n' = 
@@ -92,5 +93,5 @@ validate tokens = map check tokens
         check token = token
 
 tokenizeString :: String -> [Token]
-tokenizeString str = validate $ withAffixes $ tokens $ tokenizeStringInto (TokenizationState "" [] 0 1 1) str
+tokenizeString str = validate $ withAffixes $ tokens $ commitFromSpace $ tokenizeStringInto (TokenizationState "" [] 0 1 1) str
 

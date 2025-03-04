@@ -1,0 +1,139 @@
+<html>
+
+<head>
+    <style>
+        /* Base styling for all tags - using inline-block instead of block */
+        sentence,
+        context,
+        subject,
+        verb,
+        object,
+        apposition,
+        preposition {
+            display: inline-block;
+            position: relative;
+            margin: 4px;
+            padding: 8px 12px;
+            padding-top: 16px;
+            border: 2px solid;
+            border-radius: 8px;
+            font-family: monospace;
+            vertical-align: middle;
+        }
+
+        /* Common label styling to avoid repetition */
+        sentence::after,
+        context::after,
+        subject::after,
+        verb::after,
+        object::after,
+        apposition::after,
+        preposition::after {
+            /*position: absolute;*/
+            /*top: 2px;*/
+            /*right: 8px;*/
+            font-size: 10px;
+            font-weight: bold;
+            color: #4b5563;
+            background-color: white;
+            padding: 0 4px;
+            border-radius: 2px;
+        }
+
+        /* Individual tag label content */
+        sentence::after {
+            content: "Sentence";
+        }
+
+        context::after {
+            content: "Context";
+        }
+
+        subject::after {
+            content: "Subject";
+        }
+
+        verb::after {
+            content: "Verb";
+        }
+
+        object::after {
+            content: "Object";
+        }
+
+        apposition::after {
+            content: "Apposition";
+        }
+
+        preposition::after {
+            content: attr(class);
+        }
+
+        /* Specific styles for different tag types */
+        sentence {
+            background-color: #dbeafe;
+            border-color: #93c5fd;
+        }
+
+        context {
+            background-color: #d1fae5;
+            border-color: #6ee7b7;
+        }
+
+        subject {
+            background-color: #fef3c7;
+            border-color: #fcd34d;
+        }
+
+        verb {
+            background-color: #fce7f3;
+            border-color: #fbcfe8;
+        }
+
+        object {
+            background-color: #ede9fe;
+            border-color: #c4b5fd;
+        }
+
+        apposition {
+            background-color: #ffedd5;
+            border-color: #fdba74;
+        }
+
+        preposition {
+            background-color: #ccfbf1;
+            border-color: #5eead4;
+        }
+
+        /* Optional: add a wrapper for line wrapping control */
+        .toki-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: flex-start;
+        }
+    </style>
+</head>
+
+<body>
+    <Sentence>
+        <Context>
+            <Sentence>
+                <Subject>sina </Subject>
+                <Verb><Object>soweli </Object> moku </Verb>
+            </Sentence>
+        </Context>
+        <Subject>, mi </Subject>
+        <Verb>
+            <Preposition class=\"Origin\">ni </Preposition> <Object>sina </Object> moli
+        </Verb>
+        <Apposition>
+            <Sentence>
+                <Subject>mi </Subject>
+                <Verb>kasi moku pi jan </Verb>
+            </Sentence>
+        </Apposition>
+    </Sentence>
+</body>
+
+</html>

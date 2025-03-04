@@ -7,7 +7,7 @@ prefixes :: [String]
 prefixes = [ "an" ]
 
 suffixes :: [String]
-suffixes = [ "su", "pa", "mo", "ta", "na", "ki", "lo", "la", "en", "nu", "lu" ]
+suffixes = [ "su", "pa", "mo", "ta", "na", "ki", "lo", "la", "un", "nu", "lu" ]
 
 sufsuffixes :: [String]
 sufsuffixes = [ "la" ]
@@ -24,6 +24,7 @@ wordSet = [
     "anu",
     "awen",
     "esun",
+    "en",
     "ijo",
     "ike",
     "ilo",
