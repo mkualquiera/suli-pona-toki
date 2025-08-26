@@ -1,0 +1,111 @@
+---
+source: src/tokens/mod.rs
+expression: tokens
+---
+[
+    TokenWithLocation {
+        token: Plain(
+            "sama",
+        ),
+        line: 1,
+        column: 5,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "ijo",
+        ),
+        line: 1,
+        column: 11,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "su",
+        ),
+        line: 1,
+        column: 11,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "mi",
+        ),
+        line: 1,
+        column: 16,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "ta",
+        ),
+        line: 1,
+        column: 16,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lon",
+        ),
+        line: 1,
+        column: 24,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pa",
+        ),
+        line: 1,
+        column: 24,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "la",
+        ),
+        line: 1,
+        column: 24,
+    },
+    TokenWithLocation {
+        token: Comment(
+            ",",
+        ),
+        line: 1,
+        column: 24,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "seme",
+        ),
+        line: 1,
+        column: 32,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "su",
+        ),
+        line: 1,
+        column: 32,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pali",
+        ),
+        line: 1,
+        column: 37,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lon",
+        ),
+        line: 1,
+        column: 43,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pa",
+        ),
+        line: 1,
+        column: 43,
+    },
+    TokenWithLocation {
+        token: Punctuation(
+            ".",
+        ),
+        line: 1,
+        column: 43,
+    },
+]

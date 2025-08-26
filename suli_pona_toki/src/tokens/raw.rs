@@ -1,10 +1,12 @@
-const prefixes: [&str; 1] = ["an"];
+pub(super) const PREFIXES: [&str; 1] = ["an"];
 
-const suffixes: [&str; 10] = ["su", "pa", "mo", "ta", "na", "ki", "lo", "un", "nu", "lu"];
+pub(super) const SUFFIXES: [&str; 11] = [
+    "su", "pa", "mo", "ta", "na", "ki", "lo", "un", "nu", "lu", "en",
+];
 
-const sufsuffixes: [&str; 1] = ["la"];
+pub(super) const SUFSUFFIXES: [&str; 1] = ["la"];
 
-const roots: [&str; 129] = [
+pub(super) const ROOTS: [&str; 128] = [
     "a",
     "akesi",
     "ala",
@@ -15,7 +17,6 @@ const roots: [&str; 129] = [
     "anu",
     "awen",
     "esun",
-    "en",
     "ijo",
     "ike",
     "ilo",
