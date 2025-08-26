@@ -1,12 +1,14 @@
+use lazy_static::lazy_static;
+
 pub(super) const PREFIXES: [&str; 1] = ["an"];
 
-pub(super) const SUFFIXES: [&str; 11] = [
-    "su", "pa", "mo", "ta", "na", "ki", "lo", "un", "nu", "lu", "en",
-];
+pub(super) const SUFFIXES: [&str; 10] =
+    ["su", "pa", "mo", "ta", "na", "ki", "lo", "un", "nu", "lu"];
 
 pub(super) const SUFSUFFIXES: [&str; 1] = ["la"];
 
-pub(super) const ROOTS: [&str; 128] = [
+pub(super) const ROOTS: [&str; 129] = [
+    "en",
     "a",
     "akesi",
     "ala",
@@ -135,4 +137,14 @@ pub(super) const ROOTS: [&str; 128] = [
     "soko",
     "meso",
     "misikeke",
+];
+
+pub(super) const LITERALS: [&str; 88] = [
+    "A", "E", "I", "O", "U", "N", "KA", "KE", "KI", "KO", "KU", "LA", "LI", "LE", "LO", "LU", "MA",
+    "ME", "MI", "MO", "MU", "NA", "NE", "NI", "NO", "NU", "PA", "PE", "PI", "PO", "PU", "SA", "SE",
+    "SI", "SO", "SU", "TA", "TE", "TO", "TU", "JA", "JE", "JO", "JU", "WA", "WE", "WI", "KAN",
+    "KEN", "KIN", "KON", "KUN", "LAN", "LIN", "LEN", "LON", "LUN", "MAN", "MEN", "MIN", "MON",
+    "MUN", "NAN", "NEN", "NIN", "NON", "NUN", "PAN", "PEN", "PIN", "PON", "PUN", "SAN", "SEN",
+    "SIN", "SON", "SUN", "TAN", "TEN", "TON", "TUN", "JAN", "JEN", "JON", "JUN", "WAN", "WEN",
+    "WIN",
 ];

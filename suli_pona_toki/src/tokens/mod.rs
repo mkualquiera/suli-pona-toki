@@ -1,7 +1,7 @@
 use lazy_static::lazy_static;
 use std::collections::HashMap;
 
-use crate::tokens::raw::{PREFIXES, ROOTS, SUFFIXES, SUFSUFFIXES};
+use crate::tokens::raw::{LITERALS, PREFIXES, ROOTS, SUFFIXES, SUFSUFFIXES};
 
 mod raw;
 
@@ -15,7 +15,7 @@ struct FeaturedWord {
 fn make_map() -> HashMap<String, FeaturedWord> {
     let mut m = HashMap::new();
 
-    let roots_iter = || ROOTS.iter().chain(SUFFIXES.iter());
+    let roots_iter = || ROOTS.iter().chain(SUFFIXES.iter()).chain(LITERALS.iter());
 
     let prefix_iter = || PREFIXES.iter().map(Some).chain([None]);
     let suffix_iter = || SUFFIXES.iter().map(Some).chain([None]);
@@ -75,28 +75,34 @@ lazy_static! {
     static ref WORD_LOOKUP: HashMap<String, FeaturedWord> = make_map();
 }
 
-#[derive(Debug)]
-enum Tokens {
+#[derive(Debug, Clone)]
+pub enum Token {
     Plain(String),
     Punctuation(String),
     Comment(String),
 }
 
-#[derive(Debug)]
-struct TokenWithLocation {
-    token: Tokens,
+#[derive(Debug, Clone)]
+pub struct TokenWithLocation {
+    token: Token,
     line: usize,
     column: usize,
 }
 
-struct TokenizationState {
+impl From<TokenWithLocation> for Token {
+    fn from(value: TokenWithLocation) -> Self {
+        value.token
+    }
+}
+
+pub struct TokenizationState {
     buffer: String,
     line: usize,
     column: usize,
 }
 
 #[derive(Debug)]
-enum TokenizationError {
+pub enum TokenizationError {
     UnexpectedEndOfInput,
     InvalidCharacter {
         character: char,
@@ -115,7 +121,7 @@ enum TokenizationError {
 }
 
 impl TokenizationState {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             buffer: String::new(),
             line: 1,
@@ -130,26 +136,26 @@ impl TokenizationState {
             let mut tokens = Vec::new();
             if let Some(prefix) = featured.prefix {
                 tokens.push(TokenWithLocation {
-                    token: Tokens::Plain(prefix.to_string()),
+                    token: Token::Plain(prefix.to_string()),
                     line: self.line,
                     column: self.column,
                 });
             }
             tokens.push(TokenWithLocation {
-                token: Tokens::Plain(featured.root.to_string()),
+                token: Token::Plain(featured.root.to_string()),
                 line: self.line,
                 column: self.column,
             });
             if let Some(suffix) = featured.suffix {
                 tokens.push(TokenWithLocation {
-                    token: Tokens::Plain(suffix.to_string()),
+                    token: Token::Plain(suffix.to_string()),
                     line: self.line,
                     column: self.column,
                 });
             }
             if let Some(sufsuffix) = featured.sufsuffix {
                 tokens.push(TokenWithLocation {
-                    token: Tokens::Plain(sufsuffix.to_string()),
+                    token: Token::Plain(sufsuffix.to_string()),
                     line: self.line,
                     column: self.column,
                 });
@@ -174,7 +180,7 @@ impl TokenizationState {
             self.column += 1;
             if c == '\n' {
                 tokens.push(TokenWithLocation {
-                    token: Tokens::Punctuation("\n".to_string()),
+                    token: Token::Punctuation("\n".to_string()),
                     line: self.line,
                     column: self.column,
                 });
@@ -188,13 +194,13 @@ impl TokenizationState {
             }
             if c != ',' {
                 tokens.push(TokenWithLocation {
-                    token: Tokens::Punctuation(c.to_string()),
+                    token: Token::Punctuation(c.to_string()),
                     line: self.line,
                     column: self.column,
                 });
             } else {
                 tokens.push(TokenWithLocation {
-                    token: Tokens::Comment(c.to_string()),
+                    token: Token::Comment(c.to_string()),
                     line: self.line,
                     column: self.column,
                 });
@@ -214,7 +220,7 @@ impl TokenizationState {
         }
     }
 
-    fn feed(&mut self, input: &str) -> Result<Vec<TokenWithLocation>, TokenizationError> {
+    pub fn feed(&mut self, input: &str) -> Result<Vec<TokenWithLocation>, TokenizationError> {
         let mut tokens = Vec::new();
         let mut pointer = 0;
         for c in input.chars() {

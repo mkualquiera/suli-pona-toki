@@ -894,597 +894,674 @@ expression: tokens
     },
     TokenWithLocation {
         token: Plain(
-            "pona",
+            "PA",
         ),
         line: 12,
-        column: 5,
+        column: 3,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "PU",
+        ),
+        line: 12,
+        column: 6,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "TO",
+        ),
+        line: 12,
+        column: 9,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "JAN",
+        ),
+        line: 12,
+        column: 13,
     },
     TokenWithLocation {
         token: Plain(
             "jan",
         ),
         line: 12,
-        column: 11,
+        column: 19,
     },
     TokenWithLocation {
         token: Plain(
             "su",
         ),
         line: 12,
+        column: 19,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lukin",
+        ),
+        line: 12,
+        column: 27,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pa",
+        ),
+        line: 12,
+        column: 27,
+    },
+    TokenWithLocation {
+        token: Punctuation(
+            ".",
+        ),
+        line: 12,
+        column: 27,
+    },
+    TokenWithLocation {
+        token: Punctuation(
+            "\n",
+        ),
+        line: 12,
+        column: 29,
+    },
+    TokenWithLocation {
+        token: Punctuation(
+            "\n",
+        ),
+        line: 13,
+        column: 2,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pona",
+        ),
+        line: 14,
+        column: 5,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "jan",
+        ),
+        line: 14,
+        column: 11,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "su",
+        ),
+        line: 14,
         column: 11,
     },
     TokenWithLocation {
         token: Plain(
             "lape",
         ),
-        line: 12,
+        line: 14,
         column: 18,
     },
     TokenWithLocation {
         token: Plain(
             "ki",
         ),
-        line: 12,
+        line: 14,
         column: 18,
     },
     TokenWithLocation {
         token: Plain(
             "tomo",
         ),
-        line: 12,
+        line: 14,
         column: 25,
     },
     TokenWithLocation {
         token: Plain(
             "ta",
         ),
-        line: 12,
+        line: 14,
         column: 25,
     },
     TokenWithLocation {
         token: Plain(
             "tawa",
         ),
-        line: 12,
+        line: 14,
         column: 32,
     },
     TokenWithLocation {
         token: Plain(
             "pa",
         ),
-        line: 12,
+        line: 14,
         column: 32,
     },
     TokenWithLocation {
         token: Punctuation(
             ".",
         ),
-        line: 12,
+        line: 14,
         column: 32,
     },
     TokenWithLocation {
         token: Punctuation(
             "\n",
         ),
-        line: 12,
+        line: 14,
         column: 34,
     },
     TokenWithLocation {
         token: Plain(
             "tonsi",
         ),
-        line: 13,
+        line: 15,
         column: 6,
     },
     TokenWithLocation {
         token: Plain(
             "jan",
         ),
-        line: 13,
+        line: 15,
         column: 12,
     },
     TokenWithLocation {
         token: Plain(
             "su",
         ),
-        line: 13,
+        line: 15,
         column: 12,
     },
     TokenWithLocation {
         token: Plain(
             "sina",
         ),
-        line: 13,
+        line: 15,
         column: 17,
     },
     TokenWithLocation {
         token: Plain(
             "tomo",
         ),
-        line: 13,
+        line: 15,
         column: 22,
     },
     TokenWithLocation {
         token: Plain(
             "mo",
         ),
-        line: 13,
+        line: 15,
         column: 25,
     },
     TokenWithLocation {
         token: Plain(
             "mi",
         ),
-        line: 13,
+        line: 15,
         column: 28,
     },
     TokenWithLocation {
         token: Plain(
             "lon",
         ),
-        line: 13,
+        line: 15,
         column: 34,
     },
     TokenWithLocation {
         token: Plain(
             "lu",
         ),
-        line: 13,
+        line: 15,
         column: 34,
     },
     TokenWithLocation {
         token: Plain(
             "pona",
         ),
-        line: 13,
+        line: 15,
         column: 41,
     },
     TokenWithLocation {
         token: Plain(
             "pa",
         ),
-        line: 13,
+        line: 15,
         column: 41,
     },
     TokenWithLocation {
         token: Punctuation(
             ".",
         ),
-        line: 13,
+        line: 15,
         column: 41,
-    },
-    TokenWithLocation {
-        token: Punctuation(
-            "\n",
-        ),
-        line: 13,
-        column: 43,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "telo",
-        ),
-        line: 14,
-        column: 5,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "tomo",
-        ),
-        line: 14,
-        column: 12,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "lo",
-        ),
-        line: 14,
-        column: 12,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "jan",
-        ),
-        line: 14,
-        column: 18,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "su",
-        ),
-        line: 14,
-        column: 18,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "leko",
-        ),
-        line: 14,
-        column: 23,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "mo",
-        ),
-        line: 14,
-        column: 26,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "tawa",
-        ),
-        line: 14,
-        column: 31,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "pa",
-        ),
-        line: 14,
-        column: 34,
-    },
-    TokenWithLocation {
-        token: Punctuation(
-            ".",
-        ),
-        line: 14,
-        column: 34,
-    },
-    TokenWithLocation {
-        token: Punctuation(
-            "\n",
-        ),
-        line: 14,
-        column: 36,
     },
     TokenWithLocation {
         token: Punctuation(
             "\n",
         ),
         line: 15,
-        column: 2,
+        column: 43,
     },
     TokenWithLocation {
         token: Plain(
-            "lon",
+            "telo",
         ),
         line: 16,
-        column: 6,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "lu",
-        ),
-        line: 16,
-        column: 6,
-    },
-    TokenWithLocation {
-        token: Comment(
-            ",",
-        ),
-        line: 16,
-        column: 6,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "sina",
-        ),
-        line: 16,
-        column: 14,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "su",
-        ),
-        line: 16,
-        column: 14,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "toki",
-        ),
-        line: 16,
-        column: 23,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "pa",
-        ),
-        line: 16,
-        column: 23,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "la",
-        ),
-        line: 16,
-        column: 23,
-    },
-    TokenWithLocation {
-        token: Comment(
-            ",",
-        ),
-        line: 16,
-        column: 23,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "sina",
-        ),
-        line: 16,
-        column: 29,
+        column: 5,
     },
     TokenWithLocation {
         token: Plain(
             "tomo",
         ),
         line: 16,
-        column: 36,
+        column: 12,
     },
     TokenWithLocation {
         token: Plain(
             "lo",
         ),
         line: 16,
-        column: 36,
+        column: 12,
     },
     TokenWithLocation {
         token: Plain(
-            "mi",
+            "jan",
         ),
         line: 16,
-        column: 41,
+        column: 18,
     },
     TokenWithLocation {
         token: Plain(
             "su",
         ),
         line: 16,
-        column: 41,
+        column: 18,
     },
     TokenWithLocation {
         token: Plain(
-            "tomo",
+            "leko",
         ),
         line: 16,
-        column: 48,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "ta",
-        ),
-        line: 16,
-        column: 48,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "pona",
-        ),
-        line: 16,
-        column: 55,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "lu",
-        ),
-        line: 16,
-        column: 55,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "luka",
-        ),
-        line: 16,
-        column: 62,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "ki",
-        ),
-        line: 16,
-        column: 62,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "sitelen",
-        ),
-        line: 16,
-        column: 72,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "nu",
-        ),
-        line: 16,
-        column: 72,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "ilo",
-        ),
-        line: 16,
-        column: 78,
+        column: 23,
     },
     TokenWithLocation {
         token: Plain(
             "mo",
         ),
         line: 16,
-        column: 78,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "sina",
-        ),
-        line: 16,
-        column: 83,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "toki",
-        ),
-        line: 16,
-        column: 90,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "en",
-        ),
-        line: 16,
-        column: 90,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "sina",
-        ),
-        line: 16,
-        column: 95,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "lukin",
-        ),
-        line: 16,
-        column: 103,
-    },
-    TokenWithLocation {
-        token: Plain(
-            "na",
-        ),
-        line: 16,
-        column: 103,
+        column: 26,
     },
     TokenWithLocation {
         token: Plain(
             "tawa",
         ),
         line: 16,
-        column: 110,
+        column: 31,
     },
     TokenWithLocation {
         token: Plain(
             "pa",
         ),
         line: 16,
-        column: 110,
+        column: 34,
     },
     TokenWithLocation {
         token: Punctuation(
             ".",
         ),
         line: 16,
-        column: 110,
+        column: 34,
     },
     TokenWithLocation {
         token: Punctuation(
             "\n",
         ),
         line: 16,
+        column: 36,
+    },
+    TokenWithLocation {
+        token: Punctuation(
+            "\n",
+        ),
+        line: 17,
+        column: 2,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lon",
+        ),
+        line: 18,
+        column: 6,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lu",
+        ),
+        line: 18,
+        column: 6,
+    },
+    TokenWithLocation {
+        token: Comment(
+            ",",
+        ),
+        line: 18,
+        column: 6,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "sina",
+        ),
+        line: 18,
+        column: 14,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "su",
+        ),
+        line: 18,
+        column: 14,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "toki",
+        ),
+        line: 18,
+        column: 23,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pa",
+        ),
+        line: 18,
+        column: 23,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "la",
+        ),
+        line: 18,
+        column: 23,
+    },
+    TokenWithLocation {
+        token: Comment(
+            ",",
+        ),
+        line: 18,
+        column: 23,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "sina",
+        ),
+        line: 18,
+        column: 29,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "tomo",
+        ),
+        line: 18,
+        column: 36,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lo",
+        ),
+        line: 18,
+        column: 36,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "mi",
+        ),
+        line: 18,
+        column: 41,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "su",
+        ),
+        line: 18,
+        column: 41,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "tomo",
+        ),
+        line: 18,
+        column: 48,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "ta",
+        ),
+        line: 18,
+        column: 48,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pona",
+        ),
+        line: 18,
+        column: 55,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lu",
+        ),
+        line: 18,
+        column: 55,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "luka",
+        ),
+        line: 18,
+        column: 62,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "ki",
+        ),
+        line: 18,
+        column: 62,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "sitelen",
+        ),
+        line: 18,
+        column: 72,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "nu",
+        ),
+        line: 18,
+        column: 72,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "ilo",
+        ),
+        line: 18,
+        column: 78,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "mo",
+        ),
+        line: 18,
+        column: 78,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "sina",
+        ),
+        line: 18,
+        column: 83,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "toki",
+        ),
+        line: 18,
+        column: 90,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "un",
+        ),
+        line: 18,
+        column: 90,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "sina",
+        ),
+        line: 18,
+        column: 95,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "lukin",
+        ),
+        line: 18,
+        column: 103,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "na",
+        ),
+        line: 18,
+        column: 103,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "tawa",
+        ),
+        line: 18,
+        column: 110,
+    },
+    TokenWithLocation {
+        token: Plain(
+            "pa",
+        ),
+        line: 18,
+        column: 110,
+    },
+    TokenWithLocation {
+        token: Punctuation(
+            ".",
+        ),
+        line: 18,
+        column: 110,
+    },
+    TokenWithLocation {
+        token: Punctuation(
+            "\n",
+        ),
+        line: 18,
         column: 112,
     },
     TokenWithLocation {
         token: Plain(
             "mi",
         ),
-        line: 17,
+        line: 19,
         column: 5,
     },
     TokenWithLocation {
         token: Plain(
             "su",
         ),
-        line: 17,
+        line: 19,
         column: 5,
     },
     TokenWithLocation {
         token: Plain(
             "sina",
         ),
-        line: 17,
+        line: 19,
         column: 12,
     },
     TokenWithLocation {
         token: Plain(
             "mo",
         ),
-        line: 17,
+        line: 19,
         column: 12,
     },
     TokenWithLocation {
         token: Plain(
             "ona",
         ),
-        line: 17,
+        line: 19,
         column: 18,
     },
     TokenWithLocation {
         token: Plain(
             "mo",
         ),
-        line: 17,
+        line: 19,
         column: 18,
     },
     TokenWithLocation {
         token: Plain(
             "pona",
         ),
-        line: 17,
+        line: 19,
         column: 25,
     },
     TokenWithLocation {
         token: Plain(
             "pa",
         ),
-        line: 17,
+        line: 19,
         column: 25,
     },
     TokenWithLocation {
         token: Plain(
             "tomo",
         ),
-        line: 17,
+        line: 19,
         column: 32,
     },
     TokenWithLocation {
         token: Plain(
             "mo",
         ),
-        line: 17,
+        line: 19,
         column: 32,
     },
     TokenWithLocation {
         token: Plain(
             "leko",
         ),
-        line: 17,
+        line: 19,
         column: 39,
     },
     TokenWithLocation {
         token: Plain(
             "mo",
         ),
-        line: 17,
+        line: 19,
         column: 39,
     },
     TokenWithLocation {
         token: Plain(
             "pakala",
         ),
-        line: 17,
+        line: 19,
         column: 48,
     },
     TokenWithLocation {
         token: Plain(
             "pa",
         ),
-        line: 17,
+        line: 19,
         column: 48,
     },
     TokenWithLocation {
         token: Punctuation(
             ".",
         ),
-        line: 17,
+        line: 19,
         column: 48,
     },
 ]

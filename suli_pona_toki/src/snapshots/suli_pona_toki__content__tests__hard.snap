@@ -1,0 +1,5 @@
+---
+source: src/content.rs
+expression: tree.as_natural()
+---
+((Plain("nasa") Plain("telo")) ((Plain("ike") Plain("jan")) (Plain("suli") Plain("tomo"))))
