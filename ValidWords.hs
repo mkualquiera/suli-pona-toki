@@ -78,6 +78,7 @@ wordSet = [
     "nena",
     "ni",
     "nimi",
+    "no",
     "noka",
     "o",
     "olin",

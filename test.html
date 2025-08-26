@@ -2,6 +2,11 @@
 
 <head>
     <style>
+        @font-face {
+            font-family: 'nasin-nanpa';
+            src: url('https://mkualquiera.github.io/sitelen-musi/jan-ante/fonts/nasin-nanpa-4.0.1.otf') format('opentype');
+        }
+
         /* Base styling for all tags - using inline-block instead of block */
         sentence,
         context,
@@ -12,13 +17,40 @@
         preposition {
             display: inline-block;
             position: relative;
+            /*
             margin: 4px;
             padding: 8px 12px;
             padding-top: 16px;
             border: 2px solid;
             border-radius: 8px;
-            font-family: monospace;
+            */
+            font-family: 'nasin-nanpa';
             vertical-align: middle;
+        }
+
+        property,
+        join,
+        jointail,
+        joinhead {
+            display: inline-block;
+            position: relative;
+            font-family: 'nasin-nanpa';
+            vertical-align: middle;
+        }
+
+        property {
+            border-bottom: 2px solid black;
+            border-right: 2px solid black;
+        }
+
+        jointail {
+            border-top: 2px solid black;
+            border-right: 2px solid black;
+        }
+
+        joinhead {
+            border-top: 2px solid black;
+            border-left: 2px solid black;
         }
 
         /* Common label styling to avoid repetition */
@@ -40,7 +72,9 @@
             border-radius: 2px;
         }
 
+
         /* Individual tag label content */
+        /*
         sentence::after {
             content: "Sentence";
         }
@@ -67,7 +101,7 @@
 
         preposition::after {
             content: attr(class);
-        }
+        }*/
 
         /* Specific styles for different tag types */
         sentence {
@@ -119,23 +153,28 @@
     "<Document>
         <p>
             <Sentence>
-                <Subject>mi </Subject>
-                <Verb>pona </Verb>
-            </Sentence> <br />
+                <Subject>
+                    <Property>nasa telo</Property>
+                    <Join>
+                        <JoinTail>ike jan</JoinTail>
+                        <JoinHead>suli tomo</JoinHead>
+                    </Join>
+                </Subject>
+                <Verb>
+                    <Preposition class=\"Direction\">mi</Preposition> ike
+                </Verb>
+            </Sentence>
             <Sentence>
                 <Context>
                     <Sentence>
-                        <Subject>ona </Subject>
+                        <Subject>mi</Subject>
+                        <Verb><Object>sina</Object> sama</Verb>
                     </Sentence>
                 </Context>
-                <Subject>mi </Subject>
-                <Verb>ala sona </Verb>
-            </Sentence> <br />
-        </p>
-        <p>
-            <Sentence>
-                <Subject>sina </Subject>
-                <Verb>ike </Verb>
+                <Subject>mi</Subject>
+                <Verb>
+                    <Preposition class=\"Direction\">ni ma</Preposition> ala tawa
+                </Verb>
             </Sentence>
         </p>
     </Document>"

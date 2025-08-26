@@ -15,10 +15,21 @@ class ToHTML a where
 class RenderHTML a where
     renderHTML :: a -> String
 
+
 -- Default implementation for Typeable + ToHTML types
 instance (Typeable a, ToHTML a) => RenderHTML a where
     renderHTML x = "<" ++ typeName x ++ ">" ++ innerContent x ++ "</" 
         ++ typeName x ++ ">"
+
+instance {-# OVERLAPPING #-} RenderHTML ContentTree where
+    renderHTML Ending = ""
+    renderHTML (Leaf tok) = renderHTML tok
+    renderHTML (ContentBranch { h=headVal, t=tailVal, branchType=Property _})
+        = "<Property>" ++ renderHTML tailVal ++ "</Property>" ++ renderHTML headVal
+    renderHTML (ContentBranch { h=headVal, t=tailVal, branchType=JoinInner _})
+        = "<Join><JoinTail>" ++ renderHTML tailVal ++ "</JoinTail><JoinHead>" ++ renderHTML headVal ++ "</JoinHead></Join>"
+    renderHTML (ContentBranch { h=headVal, t=tailVal })
+        = renderHTML tailVal ++ " " ++ renderHTML headVal
 
 -- Special override just for Sentence
 instance {-# OVERLAPPING #-} RenderHTML Token where

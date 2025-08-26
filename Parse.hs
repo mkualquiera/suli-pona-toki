@@ -6,37 +6,87 @@ import Data.List (intercalate)
 
 import Data.Typeable
 
+data ContentBranchingType = Concatenation Token | Property Token | JoinInner Token 
+    | JoinOuter Token | Union Token | Alternative Token deriving (Show, Eq)
+
+data ContentTree = Ending | Leaf Token | ContentBranch {
+    branchType :: ContentBranchingType,
+    h :: ContentTree,
+    t :: ContentTree
+} deriving (Show, Eq)
+
+parseIntoTree :: ContentTree -> Token -> ContentTree
+parseIntoTree state token@(PlainToken "un" _ _) = ContentBranch {
+    branchType = Union token,
+    h = Ending,
+    t = state
+}
+parseIntoTree state token@(PlainToken "nu" _ _) = ContentBranch {
+    branchType = Alternative token,
+    h = Ending,
+    t = state
+}
+parseIntoTree state token@(PlainToken "pi" _ _) = ContentBranch {
+    branchType = Property token,
+    h = Ending,
+    t = state
+}
+parseIntoTree state@(ContentBranch {h=headVal, t=tailVal, branchType=bt}) 
+    token@(PlainToken "no" _ _) = ContentBranch {
+        branchType = bt,
+        h = ContentBranch {
+            branchType = JoinInner token,
+            h = Ending,
+            t = headVal
+        },
+        t = tailVal
+    }
+parseIntoTree state@(Leaf value) token = ContentBranch {
+    branchType = Concatenation token,
+    h = Leaf token,
+    t = Leaf value
+}
+parseIntoTree Ending token = Leaf token
+parseIntoTree state@(ContentBranch {h=headVal, t=tailVal}) token = 
+    state {
+        h = parseIntoTree headVal token,
+        t = tailVal
+    }
+
+parseTree :: [Token] -> ContentTree
+parseTree = foldl parseIntoTree Ending
+
 data PrepositionType = Direction | Origin | Using | Location | Metacommentary
     deriving (Show, Eq)
 
 data Preposition = Preposition {
     prepType :: PrepositionType,
-    prepContent :: [ Token ],
+    prepContent :: ContentTree,
     prepRemainder :: [ Token ]
 } deriving (Show, Eq)
 
 emptyPreposition :: PrepositionType -> Preposition
 emptyPreposition prepType = Preposition {
     prepType = prepType,
-    prepContent = [],
+    prepContent = Ending,
     prepRemainder = []
 }
 
 data Object = Object {
-    objContent :: [ Token ],
+    objContent :: ContentTree,
     objRemainder :: [ Token ],
     objPrepositions :: [ Preposition ]
 } deriving (Show, Eq, Typeable)
 
 emptyObject :: Object
 emptyObject = Object {
-    objContent = [],
+    objContent = Ending,
     objRemainder = [],
     objPrepositions = []
 }
 
 data Verb = Verb {
-    verbContent :: [ Token ],
+    verbContent :: ContentTree,
     objects :: [ Object ],
     verbRemainder :: [ Token ],
     verbPrepositions :: [ Preposition ]
@@ -45,20 +95,20 @@ data Verb = Verb {
 
 emptyVerb :: Verb
 emptyVerb = Verb {
-    verbContent = [],
+    verbContent = Ending,
     objects = [],
     verbRemainder = [],
     verbPrepositions = []
 }
 
 data Subject = Subject {
-    subjectContent :: [ Token ],
+    subjectContent :: ContentTree,
     subjectRemainder :: [ Token ],
     subjectPrepositions :: [ Preposition ]
 } deriving (Show, Eq, Typeable)
 
 emptySubject :: Subject = Subject {
-    subjectContent = [],
+    subjectContent = Ending,
     subjectRemainder = [],
     subjectPrepositions = []
 }                
@@ -121,7 +171,7 @@ parseTokensIntoPreposition :: Preposition -> [Token] -> Preposition
 parseTokensIntoPreposition preposition [] = preposition
 parseTokensIntoPreposition preposition (token : tokens) 
     | Just pT <- prepType = 
-        preposition{prepContent = prepRemainder preposition, 
+        preposition{prepContent = parseTree $ prepRemainder preposition, 
                     prepRemainder = tokens}
     | otherwise 
         = parseTokensIntoPreposition (parseTokenIntoPreposition 
@@ -139,7 +189,7 @@ parseTokensIntoSubject subject (PlainToken "su" _ _ : tokens) =
     parseTokensIntoSubject subject' tokens
   where
     subject' = subject {
-        subjectContent = subjectRemainder subject,
+        subjectContent = parseTree $ subjectRemainder subject,
         subjectRemainder = []
     }
 
@@ -173,7 +223,7 @@ parseTokensIntoVerb verb (PlainToken "mo" _ _ : tokens) =
   where
     verb' = verb { 
         objects = objects verb ++ [
-            emptyObject{objContent=verbRemainder verb, 
+            emptyObject{objContent=parseTree $ verbRemainder verb, 
                 objPrepositions=(verbPrepositions verb)}
         ], 
         verbRemainder = [],
@@ -181,7 +231,7 @@ parseTokensIntoVerb verb (PlainToken "mo" _ _ : tokens) =
     }
     
 parseTokensIntoVerb verb (PlainToken "pa" _ _ : tokens) = 
-    verb { verbContent = verbRemainder verb, verbRemainder = tokens }
+    verb { verbContent = parseTree $ verbRemainder verb, verbRemainder = tokens }
     
 parseTokensIntoVerb verb (token : tokens) 
     | Just pT <- prepType = 
@@ -248,7 +298,8 @@ maybeLast (_:xs) = maybeLast xs
 
 parseTokensIntoParagraph :: Paragraph -> [Token] -> Paragraph
 
-parseTokensIntoParagraph paragraph@(Paragraph {paragraphElements = []}) (PunctuationToken "\n" _ _ : tokens) = error ("Unexpected newline character")
+parseTokensIntoParagraph paragraph@(Paragraph {paragraphElements = []}) 
+    (PunctuationToken "\n" _ _ : tokens) = error ("Unexpected newline character")
 parseTokensIntoParagraph paragraph (PunctuationToken "\n" _ _ : tokens) 
     -- error if the last element is a line break
     | LineBreak <- lastElement = error ("Syntax error: two line breaks in a row")
@@ -259,10 +310,12 @@ parseTokensIntoParagraph paragraph (PunctuationToken "\n" _ _ : tokens)
         }
         lastElement = last $ paragraphElements paragraph
 
-parseTokensIntoParagraph paragraph@(Paragraph {paragraphRemainder = []}) (PunctuationToken "." _ _ : tokens) = error ("Unexpected period character")
+parseTokensIntoParagraph paragraph@(Paragraph {paragraphRemainder = []}) 
+    (PunctuationToken "." _ _ : tokens) = error ("Unexpected period character")
 parseTokensIntoParagraph paragraph (PunctuationToken "." _ _ : tokens)
     -- error if the last element is a line break and the remainder is empty
-    | Just LineBreak <- lastElement, null (paragraphRemainder paragraph) = error ("Syntax error: unexpected period character")
+    | Just LineBreak <- lastElement, null (paragraphRemainder paragraph) 
+        = error ("Syntax error: unexpected period character")
     | otherwise = parseTokensIntoParagraph paragraph' tokens
     where
         paragraph' = paragraph {
