@@ -20,11 +20,11 @@ impl LeafType {
 
 #[derive(Debug, Clone)]
 pub enum BranchType {
-    Concatenation(Token),
-    Property(Token),
-    InnerGlue(Token),
-    Union(Token),
-    Alternative(Token),
+    Concatenation,
+    Property,
+    InnerGlue,
+    Union,
+    Alternative,
 }
 
 #[derive(Debug, Clone)]
@@ -94,7 +94,7 @@ impl ContentTreeParser {
     }
 
     pub fn feed_one(&mut self, token: TokenWithLocation) -> Result<(), ContentParseError> {
-        let data = if let Token::Plain(data) = token.clone().into() {
+        let data = if let Token::Plain(data) = &token.peek_inner() {
             data
         } else {
             return Err(ContentParseError::NotPlainToken(token));
@@ -106,7 +106,7 @@ impl ContentTreeParser {
                     return Err(ContentParseError::UnionOfNothing(token));
                 } else {
                     ContentTree::Branch {
-                        branch_type: BranchType::Union(token.into()),
+                        branch_type: BranchType::Union,
                         head: Box::new(ContentTree::Terminal),
                         tail: Box::new(self.state.clone()),
                     }
@@ -117,7 +117,7 @@ impl ContentTreeParser {
                     return Err(ContentParseError::AlternativeOfNothing(token));
                 } else {
                     ContentTree::Branch {
-                        branch_type: BranchType::Alternative(token.into()),
+                        branch_type: BranchType::Alternative,
                         head: Box::new(ContentTree::Terminal),
                         tail: Box::new(self.state.clone()),
                     }
@@ -128,7 +128,7 @@ impl ContentTreeParser {
                     return Err(ContentParseError::PropertyOfNothing(token));
                 } else {
                     ContentTree::Branch {
-                        branch_type: BranchType::Property(token.into()),
+                        branch_type: BranchType::Property,
                         head: Box::new(ContentTree::Terminal),
                         tail: Box::new(self.state.clone()),
                     }
@@ -142,7 +142,7 @@ impl ContentTreeParser {
                 } = self.state.clone()
                 {
                     ContentTree::Branch {
-                        branch_type: BranchType::InnerGlue(token.into()),
+                        branch_type: BranchType::InnerGlue,
                         head: Box::new(ContentTree::Branch {
                             branch_type,
                             head: Box::new(ContentTree::Terminal),
@@ -156,7 +156,7 @@ impl ContentTreeParser {
             }
             _ => match self.state.clone() {
                 ContentTree::Terminal => {
-                    if data.to_uppercase() == data {
+                    if data.to_uppercase() == *data {
                         ContentTree::Leaf(LeafType::Literal(vec![token.into()]))
                     } else {
                         ContentTree::Leaf(LeafType::Core(token.into()))
@@ -164,29 +164,29 @@ impl ContentTreeParser {
                 }
                 ContentTree::Leaf(leaf_type) => match leaf_type {
                     LeafType::Literal(mut tokens) => {
-                        if data.to_uppercase() == data {
+                        if data.to_uppercase() == *data {
                             tokens.push(token.into());
                             ContentTree::Leaf(LeafType::Literal(tokens))
                         } else {
                             ContentTree::Branch {
-                                branch_type: BranchType::Concatenation(token.clone().into()),
+                                branch_type: BranchType::Concatenation,
                                 head: Box::new(ContentTree::Leaf(LeafType::Core(token.into()))),
                                 tail: Box::new(self.state.clone()),
                             }
                         }
                     }
                     LeafType::Core(_) => {
-                        if data.to_uppercase() == data {
+                        if data.to_uppercase() == *data {
                             ContentTree::Branch {
-                                branch_type: BranchType::Concatenation(token.clone().into()),
+                                branch_type: BranchType::Concatenation,
                                 head: Box::new(ContentTree::Leaf(LeafType::Literal(vec![
-                                    token.clone().into(),
+                                    token.into(),
                                 ]))),
                                 tail: Box::new(self.state.clone()),
                             }
                         } else {
                             ContentTree::Branch {
-                                branch_type: BranchType::Concatenation(token.clone().into()),
+                                branch_type: BranchType::Concatenation,
                                 head: Box::new(ContentTree::Leaf(LeafType::Core(token.into()))),
                                 tail: Box::new(self.state.clone()),
                             }
@@ -215,11 +215,12 @@ impl ContentTreeParser {
         Ok(())
     }
 
-    pub fn feed(&mut self, tokens: Vec<TokenWithLocation>) -> Result<(), ContentParseError> {
-        for (pointer, token) in tokens.clone().iter().enumerate() {
-            if let Err(e) = self.feed_one(token.clone()) {
+    pub fn feed(&mut self, mut tokens: Vec<TokenWithLocation>) -> Result<(), ContentParseError> {
+        while !tokens.is_empty() {
+            let token = tokens.remove(0);
+            if let Err(e) = self.feed_one(token) {
                 return Err(ContentParseError::ErrorInString {
-                    remainder: tokens[pointer..].to_vec(),
+                    remainder: tokens,
                     inner: Box::new(e),
                     state: self.state.clone(),
                 });
@@ -234,10 +235,6 @@ impl ContentTreeParser {
         } else {
             Err(ContentParseError::InvalidTreeStructure(self.state))
         }
-    }
-
-    pub fn get_current_state(&self) -> &ContentTree {
-        &self.state
     }
 }
 

@@ -82,7 +82,15 @@ pub enum Token {
     Comment(String),
 }
 
-#[derive(Debug, Clone)]
+impl Token {
+    pub fn content(&self) -> &str {
+        match self {
+            Token::Plain(s) | Token::Punctuation(s) | Token::Comment(s) => s,
+        }
+    }
+}
+
+#[derive(Debug)]
 pub struct TokenWithLocation {
     token: Token,
     line: usize,
@@ -92,6 +100,12 @@ pub struct TokenWithLocation {
 impl From<TokenWithLocation> for Token {
     fn from(value: TokenWithLocation) -> Self {
         value.token
+    }
+}
+
+impl TokenWithLocation {
+    pub fn peek_inner(&self) -> &Token {
+        &self.token
     }
 }
 
