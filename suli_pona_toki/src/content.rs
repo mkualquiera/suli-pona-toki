@@ -7,7 +7,7 @@ pub enum LeafType {
 }
 
 impl LeafType {
-    fn as_natural(&self) -> String {
+    pub fn as_natural(&self) -> String {
         match self {
             LeafType::Literal(tokens) => {
                 let parts: Vec<String> = tokens.iter().map(|t| format!("{:?}", t)).collect();
@@ -39,7 +39,7 @@ pub enum ContentTree {
 }
 
 impl ContentTree {
-    fn as_natural(&self) -> String {
+    pub fn as_natural(&self) -> String {
         match self {
             ContentTree::Terminal => "Terminal".into(),
             ContentTree::Leaf(leaf) => leaf.as_natural(),
@@ -55,7 +55,7 @@ impl ContentTree {
 
     fn is_valid(&self) -> bool {
         match self {
-            ContentTree::Terminal => true,
+            ContentTree::Terminal => false,
             ContentTree::Leaf(_) => true,
             ContentTree::Branch { head, tail, .. } => {
                 // Head cannot be Terminal in a valid tree
@@ -234,6 +234,16 @@ impl ContentTreeParser {
             Ok(self.state)
         } else {
             Err(ContentParseError::InvalidTreeStructure(self.state))
+        }
+    }
+
+    pub fn take(&mut self) -> Result<ContentTree, ContentParseError> {
+        if self.state.is_valid() {
+            let state = self.state.clone();
+            self.state = ContentTree::Terminal;
+            Ok(state)
+        } else {
+            Err(ContentParseError::InvalidTreeStructure(self.state.clone()))
         }
     }
 }
