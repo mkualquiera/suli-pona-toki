@@ -58,6 +58,11 @@ struct ObjectParser {
     prepositions: Vec<Preposition>,
 }
 
+enum ObjectParseError {
+    UnfinishedContent(ContentParseError),
+    OrphanPrepositions(Vec<Preposition>),
+}
+
 impl ObjectParser {
     pub fn new() -> Self {
         Self {
@@ -89,6 +94,18 @@ impl ObjectParser {
         let prepositions = self.prepositions.clone();
         self.prepositions.clear();
         Ok((content, prepositions))
+    }
+    pub fn is_empty(&self) -> Result<(), ObjectParseError> {
+        self.preposition_parser
+            .is_empty()
+            .map_err(ObjectParseError::UnfinishedContent)?;
+        if self.prepositions.is_empty() {
+            Ok(())
+        } else {
+            Err(ObjectParseError::OrphanPrepositions(
+                self.prepositions.clone(),
+            ))
+        }
     }
 }
 
@@ -129,6 +146,114 @@ impl VerbParser {
                 self.objects.push(object);
             }
             Ok(None)
+        }
+    }
+    pub fn steal_objects(self) -> Result<Vec<Object>, ObjectParseError> {
+        self.object_parser.is_empty()?;
+        Ok(self.objects)
+    }
+}
+
+enum PredicateType {
+    Verbed(Vec<Verb>),
+    OrphanObjects(Vec<Object>),
+}
+
+struct Sentence {
+    subject: Subject,
+    predicate: PredicateType,
+}
+
+enum SentenceParser {
+    ParsingSubject(SubjectParser),
+    ParsingPredicate {
+        subject: Subject,
+        verbs: Vec<Verb>,
+        verb_parser: VerbParser,
+    },
+}
+
+enum SentenceParsingOutput {
+    Continues(SentenceParser),
+    Finished(Sentence),
+}
+
+enum SentenceParseError {
+    Content(ContentParseError),
+    Object(ObjectParseError),
+    OrphanedObjectsWithVerbs(Vec<Object>),
+    UnfinishedSubject(SubjectParser),
+}
+
+impl SentenceParser {
+    pub fn new() -> Self {
+        Self::ParsingSubject(SubjectParser::new())
+    }
+    pub fn feed_one(
+        self,
+        token: TokenWithLocation,
+    ) -> Result<SentenceParsingOutput, SentenceParseError> {
+        match self {
+            SentenceParser::ParsingSubject(subject_parser) => {
+                if token.peek_inner().content() == "." {
+                    return Err(SentenceParseError::UnfinishedSubject(subject_parser));
+                }
+                match subject_parser
+                    .feed_one(token)
+                    .map_err(SentenceParseError::Content)?
+                {
+                    SubjectParsingOutput::Continues(subject_parser) => {
+                        Ok(SentenceParsingOutput::Continues(
+                            SentenceParser::ParsingSubject(subject_parser),
+                        ))
+                    }
+                    SubjectParsingOutput::Finished(subject) => Ok(
+                        SentenceParsingOutput::Continues(SentenceParser::ParsingPredicate {
+                            subject,
+                            verb_parser: VerbParser::new(),
+                            verbs: Vec::new(),
+                        }),
+                    ),
+                }
+            }
+            SentenceParser::ParsingPredicate {
+                subject,
+                mut verb_parser,
+                mut verbs,
+            } => {
+                if token.peek_inner().content() == "." {
+                    let orphan_objects = verb_parser
+                        .steal_objects()
+                        .map_err(SentenceParseError::Object)?;
+                    if orphan_objects.is_empty() {
+                        Ok(SentenceParsingOutput::Finished(Sentence {
+                            subject,
+                            predicate: PredicateType::Verbed(verbs),
+                        }))
+                    } else if verbs.is_empty() {
+                        Ok(SentenceParsingOutput::Finished(Sentence {
+                            subject,
+                            predicate: PredicateType::OrphanObjects(orphan_objects),
+                        }))
+                    } else {
+                        Err(SentenceParseError::OrphanedObjectsWithVerbs(orphan_objects))
+                    }
+                } else {
+                    let result = verb_parser
+                        .feed_one(token)
+                        .map_err(SentenceParseError::Content)?;
+                    if let Some(verb) = result {
+                        verbs.push(verb);
+                    }
+                    Ok(SentenceParsingOutput::Continues(
+                        SentenceParser::ParsingPredicate {
+                            subject,
+                            verb_parser,
+                            verbs,
+                        },
+                    ))
+                }
+            }
         }
     }
 }

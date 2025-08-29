@@ -67,6 +67,10 @@ impl PrepositionParser {
     pub fn take(&mut self) -> Result<ContentTree, ContentParseError> {
         self.remainder.take()
     }
+
+    pub fn is_empty(&self) -> Result<(), ContentParseError> {
+        self.remainder.is_empty()
+    }
 }
 #[cfg(test)]
 mod tests {

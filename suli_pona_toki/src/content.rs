@@ -80,6 +80,7 @@ pub enum ContentParseError {
         inner: Box<ContentParseError>,
         state: ContentTree,
     },
+    NotEmpty(ContentTree),
 }
 
 pub struct ContentTreeParser {
@@ -90,6 +91,14 @@ impl ContentTreeParser {
     pub fn new() -> Self {
         Self {
             state: ContentTree::Terminal,
+        }
+    }
+
+    pub fn is_empty(&self) -> Result<(), ContentParseError> {
+        if let ContentTree::Terminal = self.state {
+            Ok(())
+        } else {
+            Err(ContentParseError::NotEmpty(self.state.clone()))
         }
     }
 
