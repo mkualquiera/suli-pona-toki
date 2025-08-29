@@ -3,7 +3,7 @@ use crate::{
     tokens::{Token, TokenWithLocation},
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 enum PrepositionType {
     Direction,
     Origin,
@@ -27,6 +27,7 @@ impl PrepositionType {
     }
 }
 
+#[derive(Clone)]
 pub struct Preposition {
     preposition_type: PrepositionType,
     content: ContentTree,
@@ -61,6 +62,10 @@ impl PrepositionParser {
             self.remainder.feed_one(token)?;
             Ok(None)
         }
+    }
+
+    pub fn take(&mut self) -> Result<ContentTree, ContentParseError> {
+        self.remainder.take()
     }
 }
 #[cfg(test)]
