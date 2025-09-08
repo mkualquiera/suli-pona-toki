@@ -1,7 +1,10 @@
 use lazy_static::lazy_static;
 use std::collections::HashMap;
 
-use crate::tokens::raw::{LITERALS, PREFIXES, ROOTS, SUFFIXES, SUFSUFFIXES};
+use crate::{
+    Natural,
+    tokens::raw::{LITERALS, PREFIXES, ROOTS, SUFFIXES, SUFSUFFIXES},
+};
 
 mod raw;
 
@@ -80,6 +83,14 @@ pub enum Token {
     Plain(String),
     Punctuation(String),
     Comment(String),
+}
+
+impl Natural for Token {
+    fn as_natural(&self) -> String {
+        match self {
+            Token::Plain(s) | Token::Punctuation(s) | Token::Comment(s) => s.clone(),
+        }
+    }
 }
 
 impl Token {

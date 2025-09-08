@@ -1,0 +1,6 @@
+---
+source: src/sentence.rs
+assertion_line: 345
+expression: sentence.unwrap().as_natural()
+---
+Towards {uta} mi⚬ From {oko} moku◯  About {pona} lukin⚡^§

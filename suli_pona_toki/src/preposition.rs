@@ -1,4 +1,5 @@
 use crate::{
+    Natural,
     content::{ContentParseError, ContentTree, ContentTreeParser},
     tokens::{Token, TokenWithLocation},
 };
@@ -27,12 +28,36 @@ impl PrepositionType {
     }
 }
 
-#[derive(Clone)]
+impl Natural for PrepositionType {
+    fn as_natural(&self) -> String {
+        match self {
+            PrepositionType::Direction => "Towards".into(),
+            PrepositionType::Origin => "From".into(),
+            PrepositionType::Using => "With".into(),
+            PrepositionType::Location => "At".into(),
+            PrepositionType::Metacommentary => "About".into(),
+            PrepositionType::Manner => "Like".into(),
+        }
+    }
+}
+
+#[derive(Clone, Debug)]
 pub struct Preposition {
     preposition_type: PrepositionType,
     content: ContentTree,
 }
 
+impl Natural for Preposition {
+    fn as_natural(&self) -> String {
+        format!(
+            "{} {{{}}}",
+            self.preposition_type.as_natural(),
+            self.content.as_natural()
+        )
+    }
+}
+
+#[derive(Debug)]
 pub struct PrepositionParser {
     remainder: ContentTreeParser,
 }

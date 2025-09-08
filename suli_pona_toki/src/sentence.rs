@@ -1,16 +1,26 @@
 use std::result;
 
 use crate::{
+    Natural,
     content::{ContentParseError, ContentTree},
     preposition::{Preposition, PrepositionParser},
     tokens::{Token, TokenWithLocation},
 };
 
+#[derive(Debug)]
 struct Subject {
     prepositions: Vec<Preposition>,
     content: ContentTree,
 }
 
+impl Natural for Subject {
+    fn as_natural(&self) -> String {
+        let prepositions: Vec<String> = self.prepositions.iter().map(|p| p.as_natural()).collect();
+        format!("{} {}⚬", prepositions.join(", "), self.content.as_natural())
+    }
+}
+
+#[derive(Debug)]
 struct SubjectParser {
     preposition_parser: PrepositionParser,
     prepositions: Vec<Preposition>,
@@ -47,10 +57,17 @@ impl SubjectParser {
     }
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Object {
     prepositions: Vec<Preposition>,
     content: ContentTree,
+}
+
+impl Natural for Object {
+    fn as_natural(&self) -> String {
+        let prepositions: Vec<String> = self.prepositions.iter().map(|p| p.as_natural()).collect();
+        format!("{} {}◯ ", prepositions.join(" "), self.content.as_natural())
+    }
 }
 
 struct ObjectParser {
@@ -58,6 +75,7 @@ struct ObjectParser {
     prepositions: Vec<Preposition>,
 }
 
+#[derive(Debug)]
 enum ObjectParseError {
     UnfinishedContent(ContentParseError),
     OrphanPrepositions(Vec<Preposition>),
@@ -109,10 +127,24 @@ impl ObjectParser {
     }
 }
 
+#[derive(Debug)]
 struct Verb {
     objects: Vec<Object>,
     prepositions: Vec<Preposition>,
     content: ContentTree,
+}
+
+impl Natural for Verb {
+    fn as_natural(&self) -> String {
+        let objects: Vec<String> = self.objects.iter().map(|o| o.as_natural()).collect();
+        let prepositions: Vec<String> = self.prepositions.iter().map(|p| p.as_natural()).collect();
+        format!(
+            "{} {} {}⚡",
+            objects.join(" "),
+            prepositions.join(" "),
+            self.content.as_natural()
+        )
+    }
 }
 
 struct VerbParser {
@@ -154,14 +186,41 @@ impl VerbParser {
     }
 }
 
+#[derive(Debug)]
 enum PredicateType {
     Verbed(Vec<Verb>),
     OrphanObjects(Vec<Object>),
 }
 
+impl Natural for PredicateType {
+    fn as_natural(&self) -> String {
+        match self {
+            PredicateType::Verbed(verbs) => {
+                let verbs: Vec<String> = verbs.iter().map(|v| v.as_natural()).collect();
+                format!("{}^", verbs.join(" "))
+            }
+            PredicateType::OrphanObjects(objects) => {
+                let objects: Vec<String> = objects.iter().map(|o| o.as_natural()).collect();
+                format!("{}*", objects.join(" "))
+            }
+        }
+    }
+}
+
+#[derive(Debug)]
 struct Sentence {
     subject: Subject,
     predicate: PredicateType,
+}
+
+impl Natural for Sentence {
+    fn as_natural(&self) -> String {
+        format!(
+            "{} {}§",
+            self.subject.as_natural(),
+            self.predicate.as_natural()
+        )
+    }
 }
 
 enum SentenceParser {
@@ -178,6 +237,7 @@ enum SentenceParsingOutput {
     Finished(Sentence),
 }
 
+#[derive(Debug)]
 enum SentenceParseError {
     Content(ContentParseError),
     Object(ObjectParseError),
@@ -255,5 +315,33 @@ impl SentenceParser {
                 }
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::tokens::TokenizationState;
+
+    #[test]
+    fn test_sentence() {
+        let mut tokenizer = TokenizationState::new();
+        let tokens = tokenizer
+            .feed("utata misu okona mokumo ponalu lukinpa.")
+            .unwrap();
+        let mut parser = SentenceParser::new();
+        let mut sentence = None;
+        for token in tokens {
+            let parsing_output = parser.feed_one(token).unwrap();
+            match parsing_output {
+                SentenceParsingOutput::Continues(p) => parser = p,
+                SentenceParsingOutput::Finished(s) => {
+                    sentence = Some(s);
+                    break;
+                }
+            }
+        }
+        assert!(sentence.is_some());
+        insta::assert_snapshot!(sentence.unwrap().as_natural());
     }
 }

@@ -2,4 +2,4 @@
 source: src/content.rs
 expression: tree.as_natural()
 ---
-((((Plain("nasa") Plain("telo")) (Plain("loje") Plain("telo"))) (([Plain("PA"), Plain("PU"), Plain("TO"), Plain("JAN")] (Plain("ike") Plain("jan"))) (Plain("suli") Plain("tomo")))) (Plain("tawa") Plain("tomo")))
+((((nasa telo) (loje telo)) (([PA PU TO JAN] (ike jan)) (suli tomo))) (tawa tomo))

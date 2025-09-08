@@ -1,4 +1,7 @@
-use crate::tokens::{Token, TokenWithLocation};
+use crate::{
+    Natural,
+    tokens::{Token, TokenWithLocation},
+};
 
 #[derive(Debug, Clone)]
 pub enum LeafType {
@@ -6,14 +9,14 @@ pub enum LeafType {
     Core(Token),
 }
 
-impl LeafType {
-    pub fn as_natural(&self) -> String {
+impl Natural for LeafType {
+    fn as_natural(&self) -> String {
         match self {
             LeafType::Literal(tokens) => {
-                let parts: Vec<String> = tokens.iter().map(|t| format!("{:?}", t)).collect();
-                format!("[{}]", parts.join(", "))
+                let parts: Vec<String> = tokens.iter().map(|t| t.as_natural()).collect();
+                format!("[{}]", parts.join(" "))
             }
-            LeafType::Core(token) => format!("{:?}", token),
+            LeafType::Core(token) => token.as_natural(),
         }
     }
 }
@@ -38,10 +41,10 @@ pub enum ContentTree {
     },
 }
 
-impl ContentTree {
-    pub fn as_natural(&self) -> String {
+impl Natural for ContentTree {
+    fn as_natural(&self) -> String {
         match self {
-            ContentTree::Terminal => "Terminal".into(),
+            ContentTree::Terminal => "∅".into(),
             ContentTree::Leaf(leaf) => leaf.as_natural(),
             ContentTree::Branch {
                 branch_type,
@@ -52,7 +55,9 @@ impl ContentTree {
             }
         }
     }
+}
 
+impl ContentTree {
     fn is_valid(&self) -> bool {
         match self {
             ContentTree::Terminal => false,
@@ -83,6 +88,7 @@ pub enum ContentParseError {
     NotEmpty(ContentTree),
 }
 
+#[derive(Debug)]
 pub struct ContentTreeParser {
     state: ContentTree,
 }

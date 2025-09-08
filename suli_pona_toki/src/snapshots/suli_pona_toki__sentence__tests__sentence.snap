@@ -1,0 +1,42 @@
+---
+source: src/sentence.rs
+expression: sentence.unwrap()
+---
+Sentence {
+    subject: Subject {
+        prepositions: [],
+        content: Leaf(
+            Core(
+                Plain(
+                    "mi",
+                ),
+            ),
+        ),
+    },
+    predicate: Verbed(
+        [
+            Verb {
+                objects: [
+                    Object {
+                        prepositions: [],
+                        content: Leaf(
+                            Core(
+                                Plain(
+                                    "moku",
+                                ),
+                            ),
+                        ),
+                    },
+                ],
+                prepositions: [],
+                content: Leaf(
+                    Core(
+                        Plain(
+                            "moku",
+                        ),
+                    ),
+                ),
+            },
+        ],
+    ),
+}

@@ -2,4 +2,4 @@
 source: src/content.rs
 expression: tree.as_natural()
 ---
-((Plain("sina") (Plain("pona") Plain("jan"))) (Plain("sitelen") Plain("ilo")))
+((sina (pona jan)) (sitelen ilo))
