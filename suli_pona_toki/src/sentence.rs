@@ -209,23 +209,38 @@ impl Natural for PredicateType {
 
 #[derive(Debug)]
 struct Sentence {
+    context: Option<Box<Sentence>>,
     subject: Subject,
     predicate: PredicateType,
 }
 
 impl Natural for Sentence {
     fn as_natural(&self) -> String {
-        format!(
-            "{} {}§",
-            self.subject.as_natural(),
-            self.predicate.as_natural()
-        )
+        if self.context.is_none() {
+            format!(
+                "{} {}§",
+                self.subject.as_natural(),
+                self.predicate.as_natural()
+            )
+        } else {
+            let context = self.context.as_ref().unwrap();
+            format!(
+                "{} -> {} {}§",
+                context.as_natural(),
+                self.subject.as_natural(),
+                self.predicate.as_natural()
+            )
+        }
     }
 }
 
 enum SentenceParser {
-    ParsingSubject(SubjectParser),
+    ParsingSubject {
+        context: Option<Box<Sentence>>,
+        subject_parser: SubjectParser,
+    },
     ParsingPredicate {
+        context: Option<Box<Sentence>>,
         subject: Subject,
         verbs: Vec<Verb>,
         verb_parser: VerbParser,
@@ -247,28 +262,36 @@ enum SentenceParseError {
 
 impl SentenceParser {
     pub fn new() -> Self {
-        Self::ParsingSubject(SubjectParser::new())
+        Self::ParsingSubject {
+            context: None,
+            subject_parser: SubjectParser::new(),
+        }
     }
     pub fn feed_one(
         self,
         token: TokenWithLocation,
     ) -> Result<SentenceParsingOutput, SentenceParseError> {
         match self {
-            SentenceParser::ParsingSubject(subject_parser) => {
-                if token.peek_inner().content() == "." {
+            SentenceParser::ParsingSubject {
+                context,
+                subject_parser,
+            } => {
+                if token.peek_inner().content() == "." || token.peek_inner().content() == "la" {
                     return Err(SentenceParseError::UnfinishedSubject(subject_parser));
                 }
                 match subject_parser
                     .feed_one(token)
                     .map_err(SentenceParseError::Content)?
                 {
-                    SubjectParsingOutput::Continues(subject_parser) => {
-                        Ok(SentenceParsingOutput::Continues(
-                            SentenceParser::ParsingSubject(subject_parser),
-                        ))
-                    }
+                    SubjectParsingOutput::Continues(subject_parser) => Ok(
+                        SentenceParsingOutput::Continues(SentenceParser::ParsingSubject {
+                            context,
+                            subject_parser,
+                        }),
+                    ),
                     SubjectParsingOutput::Finished(subject) => Ok(
                         SentenceParsingOutput::Continues(SentenceParser::ParsingPredicate {
+                            context,
                             subject,
                             verb_parser: VerbParser::new(),
                             verbs: Vec::new(),
@@ -277,6 +300,7 @@ impl SentenceParser {
                 }
             }
             SentenceParser::ParsingPredicate {
+                context,
                 subject,
                 mut verb_parser,
                 mut verbs,
@@ -287,17 +311,44 @@ impl SentenceParser {
                         .map_err(SentenceParseError::Object)?;
                     if orphan_objects.is_empty() {
                         Ok(SentenceParsingOutput::Finished(Sentence {
+                            context,
                             subject,
                             predicate: PredicateType::Verbed(verbs),
                         }))
                     } else if verbs.is_empty() {
                         Ok(SentenceParsingOutput::Finished(Sentence {
+                            context,
                             subject,
                             predicate: PredicateType::OrphanObjects(orphan_objects),
                         }))
                     } else {
                         Err(SentenceParseError::OrphanedObjectsWithVerbs(orphan_objects))
                     }
+                } else if token.peek_inner().content() == "la" {
+                    let orphan_objects = verb_parser
+                        .steal_objects()
+                        .map_err(SentenceParseError::Object)?;
+                    let context_sentence = if orphan_objects.is_empty() {
+                        Box::new(Sentence {
+                            context,
+                            subject,
+                            predicate: PredicateType::Verbed(verbs),
+                        })
+                    } else if verbs.is_empty() {
+                        Box::new(Sentence {
+                            context,
+                            subject,
+                            predicate: PredicateType::OrphanObjects(orphan_objects),
+                        })
+                    } else {
+                        return Err(SentenceParseError::OrphanedObjectsWithVerbs(orphan_objects));
+                    };
+                    Ok(SentenceParsingOutput::Continues(
+                        SentenceParser::ParsingSubject {
+                            context: Some(context_sentence),
+                            subject_parser: SubjectParser::new(),
+                        },
+                    ))
                 } else {
                     let result = verb_parser
                         .feed_one(token)
@@ -307,6 +358,7 @@ impl SentenceParser {
                     }
                     Ok(SentenceParsingOutput::Continues(
                         SentenceParser::ParsingPredicate {
+                            context,
                             subject,
                             verb_parser,
                             verbs,
@@ -328,6 +380,28 @@ mod tests {
         let mut tokenizer = TokenizationState::new();
         let tokens = tokenizer
             .feed("utata misu okona mokumo ponalu lukinpa.")
+            .unwrap();
+        let mut parser = SentenceParser::new();
+        let mut sentence = None;
+        for token in tokens {
+            let parsing_output = parser.feed_one(token).unwrap();
+            match parsing_output {
+                SentenceParsingOutput::Continues(p) => parser = p,
+                SentenceParsingOutput::Finished(s) => {
+                    sentence = Some(s);
+                    break;
+                }
+            }
+        }
+        assert!(sentence.is_some());
+        insta::assert_snapshot!(sentence.unwrap().as_natural());
+    }
+
+    #[test]
+    fn test_sentence_with_context() {
+        let mut tokenizer = TokenizationState::new();
+        let tokens = tokenizer
+            .feed("utata misula tokisu okona mokumo ponalu lukinpa.")
             .unwrap();
         let mut parser = SentenceParser::new();
         let mut sentence = None;

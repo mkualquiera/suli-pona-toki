@@ -1,0 +1,5 @@
+---
+source: src/sentence.rs
+expression: sentence.unwrap().as_natural()
+---
+Towards {uta} mi⚬ ^§ ->  toki⚬ From {oko} moku◯  About {pona} lukin⚡^§
