@@ -7,6 +7,10 @@ use crate::{
     tokens::{Token, TokenWithLocation},
 };
 
+trait Upgrade<T> {
+    fn upgrade(self) -> T;
+}
+
 #[derive(Debug)]
 struct Subject {
     prepositions: Vec<Preposition>,
@@ -16,7 +20,7 @@ struct Subject {
 impl Natural for Subject {
     fn as_natural(&self) -> String {
         let prepositions: Vec<String> = self.prepositions.iter().map(|p| p.as_natural()).collect();
-        format!("{} {}⚬", prepositions.join(", "), self.content.as_natural())
+        format!("{} {}⚬", prepositions.join(" "), self.content.as_natural())
     }
 }
 
@@ -127,6 +131,19 @@ impl ObjectParser {
     }
 }
 
+impl Upgrade<ObjectParser> for SubjectParser {
+    fn upgrade(self) -> ObjectParser {
+        let SubjectParser {
+            preposition_parser,
+            prepositions,
+        } = self;
+        ObjectParser {
+            preposition_parser,
+            prepositions,
+        }
+    }
+}
+
 #[derive(Debug)]
 struct Verb {
     objects: Vec<Object>,
@@ -183,6 +200,15 @@ impl VerbParser {
     pub fn steal_objects(self) -> Result<Vec<Object>, ObjectParseError> {
         self.object_parser.is_empty()?;
         Ok(self.objects)
+    }
+}
+
+impl Upgrade<VerbParser> for SubjectParser {
+    fn upgrade(self) -> VerbParser {
+        VerbParser {
+            object_parser: self.upgrade(),
+            objects: Vec::new(),
+        }
     }
 }
 
@@ -285,6 +311,16 @@ impl SentenceParser {
                 context,
                 subject_parser,
             } => {
+                if token.peek_inner().content() == "mo" || token.peek_inner().content() == "pa" {
+                    let verb_parser = subject_parser.upgrade();
+                    let new_sentence_parser = SentenceParser::ParsingPredicate {
+                        context,
+                        subject: None,
+                        verb_parser,
+                        verbs: Vec::new(),
+                    };
+                    return new_sentence_parser.feed_one(token);
+                }
                 if token.peek_inner().content() == "." || token.peek_inner().content() == "la" {
                     return Err(SentenceParseError::UnfinishedSubject(subject_parser, token));
                 }
@@ -414,6 +450,26 @@ mod tests {
         let tokens = tokenizer
             .feed("utata misula tokisu okona mokumo ponalu lukinpa.")
             .unwrap();
+        let mut parser = SentenceParser::new();
+        let mut sentence = None;
+        for token in tokens {
+            let parsing_output = parser.feed_one(token).unwrap();
+            match parsing_output {
+                SentenceParsingOutput::Continues(p) => parser = p,
+                SentenceParsingOutput::Finished(s) => {
+                    sentence = Some(s);
+                    break;
+                }
+            }
+        }
+        assert!(sentence.is_some());
+        insta::assert_snapshot!(sentence.unwrap().as_natural());
+    }
+
+    #[test]
+    fn test_subjectless_sentence() {
+        let mut tokenizer = TokenizationState::new();
+        let tokens = tokenizer.feed("okomola tawapa.").unwrap();
         let mut parser = SentenceParser::new();
         let mut sentence = None;
         for token in tokens {

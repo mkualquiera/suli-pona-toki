@@ -1,0 +1,5 @@
+---
+source: src/sentence.rs
+expression: sentence.unwrap().as_natural()
+---
+ oko◯ *-§ |   tawa⚡^-§
