@@ -101,7 +101,7 @@ impl Token {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TokenWithLocation {
     token: Token,
     line: usize,

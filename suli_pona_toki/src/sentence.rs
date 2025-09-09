@@ -210,26 +210,34 @@ impl Natural for PredicateType {
 #[derive(Debug)]
 struct Sentence {
     context: Option<Box<Sentence>>,
-    subject: Subject,
+    subject: Option<Subject>,
     predicate: PredicateType,
 }
 
 impl Natural for Sentence {
     fn as_natural(&self) -> String {
         if self.context.is_none() {
-            format!(
-                "{} {}§",
-                self.subject.as_natural(),
-                self.predicate.as_natural()
-            )
+            if let Some(subject) = &self.subject {
+                format!("{} {}+§", subject.as_natural(), self.predicate.as_natural())
+            } else {
+                format!("{}-§", self.predicate.as_natural())
+            }
         } else {
             let context = self.context.as_ref().unwrap();
-            format!(
-                "{} -> {} {}§",
-                context.as_natural(),
-                self.subject.as_natural(),
-                self.predicate.as_natural()
-            )
+            if let Some(subject) = &self.subject {
+                format!(
+                    "{} | {} {}+§",
+                    context.as_natural(),
+                    subject.as_natural(),
+                    self.predicate.as_natural()
+                )
+            } else {
+                format!(
+                    "{} | {}-§",
+                    context.as_natural(),
+                    self.predicate.as_natural()
+                )
+            }
         }
     }
 }
@@ -241,7 +249,7 @@ enum SentenceParser {
     },
     ParsingPredicate {
         context: Option<Box<Sentence>>,
-        subject: Subject,
+        subject: Option<Subject>,
         verbs: Vec<Verb>,
         verb_parser: VerbParser,
     },
@@ -256,8 +264,9 @@ enum SentenceParsingOutput {
 enum SentenceParseError {
     Content(ContentParseError),
     Object(ObjectParseError),
-    OrphanedObjectsWithVerbs(Vec<Object>),
-    UnfinishedSubject(SubjectParser),
+    OrphanedObjectsWithVerbs(Vec<Object>, TokenWithLocation),
+    UnfinishedSubject(SubjectParser, TokenWithLocation),
+    EmptySentence(TokenWithLocation),
 }
 
 impl SentenceParser {
@@ -277,7 +286,7 @@ impl SentenceParser {
                 subject_parser,
             } => {
                 if token.peek_inner().content() == "." || token.peek_inner().content() == "la" {
-                    return Err(SentenceParseError::UnfinishedSubject(subject_parser));
+                    return Err(SentenceParseError::UnfinishedSubject(subject_parser, token));
                 }
                 match subject_parser
                     .feed_one(token)
@@ -292,7 +301,7 @@ impl SentenceParser {
                     SubjectParsingOutput::Finished(subject) => Ok(
                         SentenceParsingOutput::Continues(SentenceParser::ParsingPredicate {
                             context,
-                            subject,
+                            subject: Some(subject),
                             verb_parser: VerbParser::new(),
                             verbs: Vec::new(),
                         }),
@@ -305,44 +314,46 @@ impl SentenceParser {
                 mut verb_parser,
                 mut verbs,
             } => {
-                if token.peek_inner().content() == "." {
+                let commit_sentence = |context,
+                                       subject: Option<Subject>,
+                                       verb_parser: VerbParser,
+                                       verbs: Vec<Verb>| {
                     let orphan_objects = verb_parser
                         .steal_objects()
                         .map_err(SentenceParseError::Object)?;
-                    if orphan_objects.is_empty() {
-                        Ok(SentenceParsingOutput::Finished(Sentence {
+                    if orphan_objects.is_empty() && verbs.is_empty() && subject.is_none() {
+                        let token = token.clone();
+                        Err(SentenceParseError::EmptySentence(token))
+                    } else if orphan_objects.is_empty() {
+                        Ok(Sentence {
                             context,
                             subject,
                             predicate: PredicateType::Verbed(verbs),
-                        }))
+                        })
                     } else if verbs.is_empty() {
-                        Ok(SentenceParsingOutput::Finished(Sentence {
+                        Ok(Sentence {
                             context,
                             subject,
                             predicate: PredicateType::OrphanObjects(orphan_objects),
-                        }))
+                        })
                     } else {
-                        Err(SentenceParseError::OrphanedObjectsWithVerbs(orphan_objects))
+                        let token = token.clone();
+                        Err(SentenceParseError::OrphanedObjectsWithVerbs(
+                            orphan_objects,
+                            token,
+                        ))
                     }
+                };
+                if token.peek_inner().content() == "." {
+                    Ok(SentenceParsingOutput::Finished(commit_sentence(
+                        context,
+                        subject,
+                        verb_parser,
+                        verbs,
+                    )?))
                 } else if token.peek_inner().content() == "la" {
-                    let orphan_objects = verb_parser
-                        .steal_objects()
-                        .map_err(SentenceParseError::Object)?;
-                    let context_sentence = if orphan_objects.is_empty() {
-                        Box::new(Sentence {
-                            context,
-                            subject,
-                            predicate: PredicateType::Verbed(verbs),
-                        })
-                    } else if verbs.is_empty() {
-                        Box::new(Sentence {
-                            context,
-                            subject,
-                            predicate: PredicateType::OrphanObjects(orphan_objects),
-                        })
-                    } else {
-                        return Err(SentenceParseError::OrphanedObjectsWithVerbs(orphan_objects));
-                    };
+                    let context_sentence =
+                        Box::new(commit_sentence(context, subject, verb_parser, verbs)?);
                     Ok(SentenceParsingOutput::Continues(
                         SentenceParser::ParsingSubject {
                             context: Some(context_sentence),
