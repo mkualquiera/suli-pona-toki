@@ -238,33 +238,35 @@ struct Sentence {
     context: Option<Box<Sentence>>,
     subject: Option<Subject>,
     predicate: PredicateType,
+    apposition: Option<Box<Sentence>>,
 }
 
 impl Natural for Sentence {
     fn as_natural(&self) -> String {
-        if self.context.is_none() {
-            if let Some(subject) = &self.subject {
-                format!("{} {}+§", subject.as_natural(), self.predicate.as_natural())
-            } else {
-                format!("{}-§", self.predicate.as_natural())
-            }
+        let ending = if self.subject.is_some() { "+§" } else { "-§" };
+        let subject = if let Some(subject) = &self.subject {
+            subject.as_natural()
         } else {
-            let context = self.context.as_ref().unwrap();
-            if let Some(subject) = &self.subject {
-                format!(
-                    "{} | {} {}+§",
-                    context.as_natural(),
-                    subject.as_natural(),
-                    self.predicate.as_natural()
-                )
-            } else {
-                format!(
-                    "{} | {}-§",
-                    context.as_natural(),
-                    self.predicate.as_natural()
-                )
-            }
-        }
+            String::new()
+        };
+        let context = if let Some(context) = &self.context {
+            format!("{} | ", context.as_natural())
+        } else {
+            String::new()
+        };
+        let apposition = if let Some(apposition) = &self.apposition {
+            format!(" : {}", apposition.as_natural())
+        } else {
+            String::new()
+        };
+        format!(
+            "{} {} {}{}{}",
+            context,
+            subject,
+            self.predicate.as_natural(),
+            apposition,
+            ending
+        )
     }
 }
 
@@ -278,6 +280,7 @@ enum SentenceParser {
         subject: Option<Subject>,
         verbs: Vec<Verb>,
         verb_parser: VerbParser,
+        apposition_parser: Option<Box<SentenceParser>>,
     },
 }
 
@@ -293,6 +296,7 @@ enum SentenceParseError {
     OrphanedObjectsWithVerbs(Vec<Object>, TokenWithLocation),
     UnfinishedSubject(SubjectParser, TokenWithLocation),
     EmptySentence(TokenWithLocation),
+    AppositionInSubject(TokenWithLocation),
 }
 
 impl SentenceParser {
@@ -311,6 +315,9 @@ impl SentenceParser {
                 context,
                 subject_parser,
             } => {
+                if token.peek_inner().content() == ":" {
+                    return Err(SentenceParseError::AppositionInSubject(token));
+                }
                 if token.peek_inner().content() == "mo" || token.peek_inner().content() == "pa" {
                     let verb_parser = subject_parser.upgrade();
                     let new_sentence_parser = SentenceParser::ParsingPredicate {
@@ -318,6 +325,7 @@ impl SentenceParser {
                         subject: None,
                         verb_parser,
                         verbs: Vec::new(),
+                        apposition_parser: None,
                     };
                     return new_sentence_parser.feed_one(token);
                 }
@@ -340,6 +348,7 @@ impl SentenceParser {
                             subject: Some(subject),
                             verb_parser: VerbParser::new(),
                             verbs: Vec::new(),
+                            apposition_parser: None,
                         }),
                     ),
                 }
@@ -349,47 +358,94 @@ impl SentenceParser {
                 subject,
                 mut verb_parser,
                 mut verbs,
+                mut apposition_parser,
             } => {
-                let commit_sentence = |context,
-                                       subject: Option<Subject>,
-                                       verb_parser: VerbParser,
-                                       verbs: Vec<Verb>| {
-                    let orphan_objects = verb_parser
-                        .steal_objects()
-                        .map_err(SentenceParseError::Object)?;
-                    if orphan_objects.is_empty() && verbs.is_empty() && subject.is_none() {
-                        let token = token.clone();
-                        Err(SentenceParseError::EmptySentence(token))
-                    } else if orphan_objects.is_empty() {
-                        Ok(Sentence {
-                            context,
-                            subject,
-                            predicate: PredicateType::Verbed(verbs),
-                        })
-                    } else if verbs.is_empty() {
-                        Ok(Sentence {
-                            context,
-                            subject,
-                            predicate: PredicateType::OrphanObjects(orphan_objects),
-                        })
-                    } else {
-                        let token = token.clone();
-                        Err(SentenceParseError::OrphanedObjectsWithVerbs(
-                            orphan_objects,
-                            token,
-                        ))
+                let inner_token = token.clone();
+                let commit_sentence =
+                    |context,
+                     subject: Option<Subject>,
+                     verb_parser: VerbParser,
+                     verbs: Vec<Verb>,
+                     apposition: Option<Box<Sentence>>| {
+                        let orphan_objects = verb_parser
+                            .steal_objects()
+                            .map_err(SentenceParseError::Object)?;
+                        if orphan_objects.is_empty() && verbs.is_empty() && subject.is_none() {
+                            let token = inner_token.clone();
+                            Err(SentenceParseError::EmptySentence(token))
+                        } else if orphan_objects.is_empty() {
+                            Ok(Sentence {
+                                context,
+                                subject,
+                                predicate: PredicateType::Verbed(verbs),
+                                apposition,
+                            })
+                        } else if verbs.is_empty() {
+                            Ok(Sentence {
+                                context,
+                                subject,
+                                predicate: PredicateType::OrphanObjects(orphan_objects),
+                                apposition,
+                            })
+                        } else {
+                            let token = inner_token.clone();
+                            Err(SentenceParseError::OrphanedObjectsWithVerbs(
+                                orphan_objects,
+                                token,
+                            ))
+                        }
+                    };
+                if let Some(apposition_parser) = apposition_parser.take() {
+                    let aposition_parsing_output = apposition_parser.feed_one(token)?;
+                    match aposition_parsing_output {
+                        SentenceParsingOutput::Finished(apposition) => {
+                            return Ok(SentenceParsingOutput::Finished(commit_sentence(
+                                context,
+                                subject,
+                                verb_parser,
+                                verbs,
+                                Some(Box::new(apposition)),
+                            )?));
+                        }
+                        SentenceParsingOutput::Continues(p) => {
+                            return Ok(SentenceParsingOutput::Continues(
+                                SentenceParser::ParsingPredicate {
+                                    context,
+                                    subject,
+                                    verb_parser,
+                                    verbs,
+                                    apposition_parser: Some(Box::new(p)),
+                                },
+                            ));
+                        }
                     }
-                };
+                }
+                if token.peek_inner().content() == ":" {
+                    if apposition_parser.is_some() {
+                        unreachable!("Multiple appositions are not allowed");
+                    }
+                    let apposition_parser = Box::new(SentenceParser::new());
+                    return Ok(SentenceParsingOutput::Continues(
+                        SentenceParser::ParsingPredicate {
+                            context,
+                            subject,
+                            verb_parser,
+                            verbs,
+                            apposition_parser: Some(apposition_parser),
+                        },
+                    ));
+                }
                 if token.peek_inner().content() == "." {
                     Ok(SentenceParsingOutput::Finished(commit_sentence(
                         context,
                         subject,
                         verb_parser,
                         verbs,
+                        None,
                     )?))
                 } else if token.peek_inner().content() == "la" {
                     let context_sentence =
-                        Box::new(commit_sentence(context, subject, verb_parser, verbs)?);
+                        Box::new(commit_sentence(context, subject, verb_parser, verbs, None)?);
                     Ok(SentenceParsingOutput::Continues(
                         SentenceParser::ParsingSubject {
                             context: Some(context_sentence),
@@ -409,6 +465,7 @@ impl SentenceParser {
                             subject,
                             verb_parser,
                             verbs,
+                            apposition_parser: None,
                         },
                     ))
                 }
@@ -470,6 +527,26 @@ mod tests {
     fn test_subjectless_sentence() {
         let mut tokenizer = TokenizationState::new();
         let tokens = tokenizer.feed("okomola tawapa.").unwrap();
+        let mut parser = SentenceParser::new();
+        let mut sentence = None;
+        for token in tokens {
+            let parsing_output = parser.feed_one(token).unwrap();
+            match parsing_output {
+                SentenceParsingOutput::Continues(p) => parser = p,
+                SentenceParsingOutput::Finished(s) => {
+                    sentence = Some(s);
+                    break;
+                }
+            }
+        }
+        assert!(sentence.is_some());
+        insta::assert_snapshot!(sentence.unwrap().as_natural());
+    }
+
+    #[test]
+    fn test_apposition() {
+        let mut tokenizer = TokenizationState::new();
+        let tokens = tokenizer.feed("nisu ponapa: ijomo mokupa.").unwrap();
         let mut parser = SentenceParser::new();
         let mut sentence = None;
         for token in tokens {
