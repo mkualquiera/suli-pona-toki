@@ -143,6 +143,7 @@ pub enum TokenizationError {
         remainder: String,
         inner: Box<TokenizationError>,
     },
+    NotEmptyBuffer(String),
 }
 
 impl TokenizationState {
@@ -151,6 +152,14 @@ impl TokenizationState {
             buffer: String::new(),
             line: 1,
             column: 1,
+        }
+    }
+
+    pub fn is_empty(&self) -> Result<(), TokenizationError> {
+        if self.buffer.is_empty() {
+            Ok(())
+        } else {
+            Err(TokenizationError::NotEmptyBuffer(self.buffer.clone()))
         }
     }
 
@@ -196,7 +205,7 @@ impl TokenizationState {
         }
     }
 
-    fn feed_one(&mut self, c: char) -> Result<Vec<TokenWithLocation>, TokenizationError> {
+    pub fn feed_one(&mut self, c: char) -> Result<Vec<TokenWithLocation>, TokenizationError> {
         let mut tokens = Vec::new();
         if c.is_whitespace() {
             for t in self.commit_buffer()? {

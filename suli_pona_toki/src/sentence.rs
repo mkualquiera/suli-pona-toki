@@ -12,7 +12,7 @@ trait Upgrade<T> {
 }
 
 #[derive(Debug)]
-struct Subject {
+pub struct Subject {
     prepositions: Vec<Preposition>,
     content: ContentTree,
 }
@@ -25,14 +25,20 @@ impl Natural for Subject {
 }
 
 #[derive(Debug)]
-struct SubjectParser {
+pub struct SubjectParser {
     preposition_parser: PrepositionParser,
     prepositions: Vec<Preposition>,
 }
 
-enum SubjectParsingOutput {
+pub enum SubjectParsingOutput {
     Continues(SubjectParser),
     Finished(Subject),
+}
+
+#[derive(Debug)]
+pub enum SubjectParsingError {
+    PrepositionsNotEmpty(Vec<Preposition>),
+    HasContent(ContentParseError),
 }
 
 impl SubjectParser {
@@ -40,6 +46,18 @@ impl SubjectParser {
         Self {
             preposition_parser: PrepositionParser::new(),
             prepositions: Vec::new(),
+        }
+    }
+    pub fn is_empty(&self) -> Result<(), SubjectParsingError> {
+        self.preposition_parser
+            .is_empty()
+            .map_err(SubjectParsingError::HasContent)?;
+        if self.prepositions.is_empty() {
+            Ok(())
+        } else {
+            Err(SubjectParsingError::PrepositionsNotEmpty(
+                self.prepositions.clone(),
+            ))
         }
     }
     pub fn feed_one(
@@ -62,7 +80,7 @@ impl SubjectParser {
 }
 
 #[derive(Clone, Debug)]
-struct Object {
+pub struct Object {
     prepositions: Vec<Preposition>,
     content: ContentTree,
 }
@@ -80,7 +98,7 @@ struct ObjectParser {
 }
 
 #[derive(Debug)]
-enum ObjectParseError {
+pub enum ObjectParseError {
     UnfinishedContent(ContentParseError),
     OrphanPrepositions(Vec<Preposition>),
 }
@@ -145,7 +163,7 @@ impl Upgrade<ObjectParser> for SubjectParser {
 }
 
 #[derive(Debug)]
-struct Verb {
+pub struct Verb {
     objects: Vec<Object>,
     prepositions: Vec<Preposition>,
     content: ContentTree,
@@ -164,7 +182,7 @@ impl Natural for Verb {
     }
 }
 
-struct VerbParser {
+pub struct VerbParser {
     object_parser: ObjectParser,
     objects: Vec<Object>,
 }
@@ -234,7 +252,7 @@ impl Natural for PredicateType {
 }
 
 #[derive(Debug)]
-struct Sentence {
+pub struct Sentence {
     context: Option<Box<Sentence>>,
     subject: Option<Subject>,
     predicate: PredicateType,
@@ -270,7 +288,7 @@ impl Natural for Sentence {
     }
 }
 
-enum SentenceParser {
+pub enum SentenceParser {
     ParsingSubject {
         context: Option<Box<Sentence>>,
         subject_parser: SubjectParser,
@@ -284,19 +302,22 @@ enum SentenceParser {
     },
 }
 
-enum SentenceParsingOutput {
+pub enum SentenceParsingOutput {
     Continues(SentenceParser),
     Finished(Sentence),
 }
 
 #[derive(Debug)]
-enum SentenceParseError {
+pub enum SentenceParseError {
     Content(ContentParseError),
     Object(ObjectParseError),
     OrphanedObjectsWithVerbs(Vec<Object>, TokenWithLocation),
     UnfinishedSubject(SubjectParser, TokenWithLocation),
     EmptySentence(TokenWithLocation),
     AppositionInSubject(TokenWithLocation),
+    PredicateNotEmpty,
+    ContextNotEmpty,
+    SubjectNotEmpty(SubjectParsingError),
 }
 
 impl SentenceParser {
@@ -304,6 +325,22 @@ impl SentenceParser {
         Self::ParsingSubject {
             context: None,
             subject_parser: SubjectParser::new(),
+        }
+    }
+    pub fn is_empty(&mut self) -> Result<(), SentenceParseError> {
+        match self {
+            SentenceParser::ParsingSubject {
+                context,
+                subject_parser,
+            } => {
+                if context.is_some() {
+                    return Err(SentenceParseError::ContextNotEmpty);
+                }
+                subject_parser
+                    .is_empty()
+                    .map_err(SentenceParseError::SubjectNotEmpty)
+            }
+            SentenceParser::ParsingPredicate { .. } => Err(SentenceParseError::PredicateNotEmpty),
         }
     }
     pub fn feed_one(
