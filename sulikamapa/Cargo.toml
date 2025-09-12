@@ -1,0 +1,17 @@
+[package]
+name = "sulikamapa"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+clap = { version = "4.5.47", features = ["derive"] }
+suli_pona_toki = { path = "../suli_pona_toki" }
+
+[dev-dependencies]
+assert_cmd = "2.0"
+insta = "1.0"
+tempfile = "3.0"
+
+[[bin]]
+name = "skp"  # This will be the installed binary name
+path = "src/main.rs"

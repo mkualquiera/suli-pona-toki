@@ -1,0 +1,16 @@
+---
+source: sulikamapa/tests/cli_tests.rs
+assertion_line: 26
+expression: output
+---
+Ok(
+    Output {
+        status: ExitStatus(
+            unix_wait_status(
+                0,
+            ),
+        ),
+        stdout: "<preserved><p>[[Parsed sentence:     (suli kama)⚡^-§]][[Parsed sentence:   ona⚬  About {kin} pona⚡^+§]]<br/>[[Parsed sentence:     (suli kama)⚡^-§]]</p><p>[[Parsed sentence:   (linja sin)⚬ ^+§]]</p></preserved>",
+        stderr: "",
+    },
+)
