@@ -127,7 +127,7 @@ mod tests {
 
     #[test]
     fn test_single_preposition() {
-        let result = parse_prepositions("sina suli ta tomo ");
+        let result = parse_prepositions("sina sulita tomo ");
         assert!(result.is_ok());
         let prepositions = result.unwrap();
         assert_eq!(prepositions.len(), 1);
@@ -136,7 +136,7 @@ mod tests {
 
     #[test]
     fn test_multiple_prepositions() {
-        let result = parse_prepositions("sina pona ta tomo na jan ki ilo ");
+        let result = parse_prepositions("sina ponata tomona janki ilo ");
         assert!(result.is_ok());
         let prepositions = result.unwrap();
         assert_eq!(prepositions.len(), 3);
@@ -147,7 +147,7 @@ mod tests {
 
     #[test]
     fn test_all_preposition_types() {
-        let result = parse_prepositions("jan ta tomo na ilo ki moku lo supa lu nasa ");
+        let result = parse_prepositions("janta tomona iloki mokulo supalu nasa ");
         assert!(result.is_ok());
         let prepositions = result.unwrap();
         assert_eq!(prepositions.len(), 5);
@@ -160,7 +160,7 @@ mod tests {
 
     #[test]
     fn test_consecutive_prepositions() {
-        let result = parse_prepositions("jan ta ma na ilo ki tomo ");
+        let result = parse_prepositions("janta tomona iloki nasa ");
         assert!(result.is_ok());
         let prepositions = result.unwrap();
         assert_eq!(prepositions.len(), 3);
@@ -171,7 +171,7 @@ mod tests {
 
     #[test]
     fn test_invalid_content_structure() {
-        let result = parse_prepositions("jan pi ta tomo ");
+        let result = parse_prepositions("jan pita tomo ");
         assert!(result.is_err());
         assert!(matches!(
             result.unwrap_err(),

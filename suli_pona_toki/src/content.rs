@@ -32,8 +32,13 @@ pub enum BranchType {
 
 #[derive(Debug, Clone)]
 pub enum ContentTree {
-    Terminal,
-    Leaf(LeafType),
+    Terminal {
+        negated: bool,
+    },
+    Leaf {
+        leaf_type: LeafType,
+        negated: bool,
+    },
     Branch {
         branch_type: BranchType,
         head: Box<ContentTree>,
@@ -44,8 +49,14 @@ pub enum ContentTree {
 impl Natural for ContentTree {
     fn as_natural(&self) -> String {
         match self {
-            ContentTree::Terminal => "∅".into(),
-            ContentTree::Leaf(leaf) => leaf.as_natural(),
+            ContentTree::Terminal { .. } => "∅".into(),
+            ContentTree::Leaf { leaf_type, negated } => {
+                if *negated {
+                    format!("an{}", leaf_type.as_natural())
+                } else {
+                    leaf_type.as_natural()
+                }
+            }
             ContentTree::Branch {
                 branch_type,
                 head,
@@ -60,11 +71,11 @@ impl Natural for ContentTree {
 impl ContentTree {
     fn is_valid(&self) -> bool {
         match self {
-            ContentTree::Terminal => false,
-            ContentTree::Leaf(_) => true,
+            ContentTree::Terminal { .. } => false,
+            ContentTree::Leaf { .. } => true,
             ContentTree::Branch { head, tail, .. } => {
                 // Head cannot be Terminal in a valid tree
-                !matches!(head.as_ref(), ContentTree::Terminal)
+                !matches!(head.as_ref(), ContentTree::Terminal { .. })
                     && head.is_valid()
                     && tail.is_valid()
             }
@@ -96,13 +107,17 @@ pub struct ContentTreeParser {
 impl ContentTreeParser {
     pub fn new() -> Self {
         Self {
-            state: ContentTree::Terminal,
+            state: ContentTree::Terminal { negated: false },
         }
     }
 
     pub fn is_empty(&self) -> Result<(), ContentParseError> {
-        if let ContentTree::Terminal = self.state {
-            Ok(())
+        if let ContentTree::Terminal { negated } = self.state {
+            if negated {
+                Err(ContentParseError::NotEmpty(self.state.clone()))
+            } else {
+                Ok(())
+            }
         } else {
             Err(ContentParseError::NotEmpty(self.state.clone()))
         }
@@ -117,34 +132,34 @@ impl ContentTreeParser {
 
         self.state = match data.as_str() {
             "un" => {
-                if let ContentTree::Terminal = self.state {
+                if let ContentTree::Terminal { .. } = self.state {
                     return Err(ContentParseError::UnionOfNothing(token));
                 } else {
                     ContentTree::Branch {
                         branch_type: BranchType::Union,
-                        head: Box::new(ContentTree::Terminal),
+                        head: Box::new(ContentTree::Terminal { negated: false }),
                         tail: Box::new(self.state.clone()),
                     }
                 }
             }
             "nu" => {
-                if let ContentTree::Terminal = self.state {
+                if let ContentTree::Terminal { .. } = self.state {
                     return Err(ContentParseError::AlternativeOfNothing(token));
                 } else {
                     ContentTree::Branch {
                         branch_type: BranchType::Alternative,
-                        head: Box::new(ContentTree::Terminal),
+                        head: Box::new(ContentTree::Terminal { negated: false }),
                         tail: Box::new(self.state.clone()),
                     }
                 }
             }
             "pi" => {
-                if let ContentTree::Terminal = self.state {
+                if let ContentTree::Terminal { .. } = self.state {
                     return Err(ContentParseError::PropertyOfNothing(token));
                 } else {
                     ContentTree::Branch {
                         branch_type: BranchType::Property,
-                        head: Box::new(ContentTree::Terminal),
+                        head: Box::new(ContentTree::Terminal { negated: false }),
                         tail: Box::new(self.state.clone()),
                     }
                 }
@@ -160,7 +175,7 @@ impl ContentTreeParser {
                         branch_type,
                         head: Box::new(ContentTree::Branch {
                             branch_type: BranchType::InnerGlue,
-                            head: Box::new(ContentTree::Terminal),
+                            head: Box::new(ContentTree::Terminal { negated: false }),
                             tail: head,
                         }),
                         tail,
@@ -170,22 +185,43 @@ impl ContentTreeParser {
                 }
             }
             _ => match self.state.clone() {
-                ContentTree::Terminal => {
-                    if data.to_uppercase() == *data {
-                        ContentTree::Leaf(LeafType::Literal(vec![token.into()]))
+                ContentTree::Terminal { negated } => {
+                    if data == "an" {
+                        ContentTree::Terminal { negated: true }
+                    } else if data.to_uppercase() == *data {
+                        //ContentTree::Leaf(LeafType::Literal(vec![token.into()]))
+                        ContentTree::Leaf {
+                            leaf_type: LeafType::Literal(vec![token.into()]),
+                            negated,
+                        }
                     } else {
-                        ContentTree::Leaf(LeafType::Core(token.into()))
+                        ContentTree::Leaf {
+                            leaf_type: LeafType::Core(token.into()),
+                            negated,
+                        }
                     }
                 }
-                ContentTree::Leaf(leaf_type) => match leaf_type {
+                ContentTree::Leaf { leaf_type, negated } => match leaf_type {
                     LeafType::Literal(mut tokens) => {
                         if data.to_uppercase() == *data {
                             tokens.push(token.into());
-                            ContentTree::Leaf(LeafType::Literal(tokens))
+                            ContentTree::Leaf {
+                                leaf_type: LeafType::Literal(tokens),
+                                negated,
+                            }
+                        } else if data == "an" {
+                            ContentTree::Branch {
+                                branch_type: BranchType::Concatenation,
+                                head: Box::new(ContentTree::Terminal { negated: true }),
+                                tail: Box::new(self.state.clone()),
+                            }
                         } else {
                             ContentTree::Branch {
                                 branch_type: BranchType::Concatenation,
-                                head: Box::new(ContentTree::Leaf(LeafType::Core(token.into()))),
+                                head: Box::new(ContentTree::Leaf {
+                                    leaf_type: LeafType::Core(token.into()),
+                                    negated: false,
+                                }),
                                 tail: Box::new(self.state.clone()),
                             }
                         }
@@ -194,15 +230,25 @@ impl ContentTreeParser {
                         if data.to_uppercase() == *data {
                             ContentTree::Branch {
                                 branch_type: BranchType::Concatenation,
-                                head: Box::new(ContentTree::Leaf(LeafType::Literal(vec![
-                                    token.into(),
-                                ]))),
+                                head: Box::new(ContentTree::Leaf {
+                                    leaf_type: LeafType::Literal(vec![token.into()]),
+                                    negated,
+                                }),
+                                tail: Box::new(self.state.clone()),
+                            }
+                        } else if data == "an" {
+                            ContentTree::Branch {
+                                branch_type: BranchType::Concatenation,
+                                head: Box::new(ContentTree::Terminal { negated: true }),
                                 tail: Box::new(self.state.clone()),
                             }
                         } else {
                             ContentTree::Branch {
                                 branch_type: BranchType::Concatenation,
-                                head: Box::new(ContentTree::Leaf(LeafType::Core(token.into()))),
+                                head: Box::new(ContentTree::Leaf {
+                                    leaf_type: LeafType::Core(token.into()),
+                                    negated: false,
+                                }),
                                 tail: Box::new(self.state.clone()),
                             }
                         }
@@ -255,7 +301,7 @@ impl ContentTreeParser {
     pub fn take(&mut self) -> Result<ContentTree, ContentParseError> {
         if self.state.is_valid() {
             let state = self.state.clone();
-            self.state = ContentTree::Terminal;
+            self.state = ContentTree::Terminal { negated: false };
             Ok(state)
         } else {
             Err(ContentParseError::InvalidTreeStructure(self.state.clone()))
@@ -304,7 +350,7 @@ mod tests {
     fn test_hardest() {
         let mut tokenizer = TokenizationState::new();
         let tokens = tokenizer
-            .feed("nasa telo nu loje telo pi PA PU TO JAN no ike jan no suli tomo un tawa tomo ")
+            .feed("nasa telonu loje telo pi PA PU TO JAN no ike jan no suli tomoun tawa tomo ")
             .unwrap();
         let mut parser = ContentTreeParser::new();
         parser.feed(tokens).unwrap();
@@ -329,7 +375,27 @@ mod tests {
     #[test]
     fn test_problematic() {
         let mut tokenizer = TokenizationState::new();
-        let tokens = tokenizer.feed("nasa telo").unwrap();
+        let tokens = tokenizer.feed("nasa telo ").unwrap();
+        let mut parser = ContentTreeParser::new();
+        parser.feed(tokens).unwrap();
+        let tree = parser.close().unwrap();
+        insta::assert_snapshot!(tree.as_natural());
+    }
+
+    #[test]
+    fn test_negation() {
+        let mut tokenizer = TokenizationState::new();
+        let tokens = tokenizer.feed("suli anpona ").unwrap();
+        let mut parser = ContentTreeParser::new();
+        parser.feed(tokens).unwrap();
+        let tree = parser.close().unwrap();
+        insta::assert_snapshot!(tree.as_natural());
+    }
+
+    #[test]
+    fn test_problematic2() {
+        let mut tokenizer = TokenizationState::new();
+        let tokens = tokenizer.feed("anwawa kama ").unwrap();
         let mut parser = ContentTreeParser::new();
         parser.feed(tokens).unwrap();
         let tree = parser.close().unwrap();

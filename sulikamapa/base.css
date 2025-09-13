@@ -1,0 +1,125 @@
+/* Shared semantic marker styles */
+sentence[role="context"]::after,
+verb::after,
+subject::after,
+object::after,
+preposition[role="direction"]::after,
+preposition[type="origin"]::after,
+preposition[type="using"]::after,
+preposition[type="location"]::after,
+preposition[type="metacommentary"]::after,
+preposition[type="manner"]::after,
+union::after,
+alternative::after,
+contentleaf[type="negated"]::before {
+    font-size: 0.5em;
+    font-weight: 900;
+    vertical-align: super;
+    margin-left: -0.15em;
+}
+
+contentleaf[type="negated"]::before {
+    margin-left: 0;
+}
+
+/* Content-specific markers */
+sentence[role="context"]::after {
+    content: "la";
+}
+
+sentence[role="apposition"]::before {
+    content: ":";
+}
+
+verb::after {
+    content: "pali";
+}
+
+subject::after {
+    content: "li";
+}
+
+object::after {
+    content: "e";
+}
+
+preposition[role="direction"]::after {
+    content: "tawa";
+}
+
+preposition[type="origin"]::after {
+    content: "tan";
+}
+
+preposition[type="using"]::after {
+    content: "kepeken";
+}
+
+preposition[type="location"]::after {
+    content: "lon";
+}
+
+preposition[type="metacommentary"]::after {
+    content: "pilin";
+}
+
+preposition[type="manner"]::after {
+    content: "sama";
+}
+
+union::after {
+    content: "en";
+}
+
+alternative::after {
+    content: "anu";
+}
+
+contentleaf[type="negated"]::before {
+    content: "ala";
+}
+
+/* Shared border styles */
+property,
+gluetail,
+gluehead {
+    border-width: 0.1em;
+    border-style: solid;
+    border-color: black;
+    border-radius: 0.2em;
+    margin-right: 0.2em;
+}
+
+/* Specific border configurations */
+property {
+    border-top: none;
+    border-left: none;
+}
+
+gluetail {
+    border-bottom: none;
+    border-left: none;
+}
+
+gluehead {
+    border-bottom: none;
+    border-right: none;
+}
+
+verb::after,
+object::after,
+subject::after {
+    vertical-align: baseline;
+}
+
+sentence,
+verb,
+object,
+subject,
+preposition,
+property,
+alternative,
+union,
+glue {
+    display: inline-block;
+}
