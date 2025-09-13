@@ -79,16 +79,16 @@ impl AsHtml for ContentTree {
                     write!(output, "</glue>")?;
                 }
                 BranchType::Union => {
-                    tail.write_html(output, None)?;
                     write!(output, "<union>")?;
-                    head.write_html(output, None)?;
+                    tail.write_html(output, None)?;
                     write!(output, "</union>")?;
+                    head.write_html(output, None)?;
                 }
                 BranchType::Alternative => {
-                    tail.write_html(output, None)?;
                     write!(output, "<alternative>")?;
-                    head.write_html(output, None)?;
+                    tail.write_html(output, None)?;
                     write!(output, "</alternative>")?;
+                    head.write_html(output, None)?;
                 }
             },
         }

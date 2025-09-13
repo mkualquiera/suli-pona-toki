@@ -5,7 +5,7 @@ use crate::{
 };
 
 #[derive(Debug, Clone)]
-enum PrepositionType {
+pub enum PrepositionType {
     Direction,
     Origin,
     Using,
@@ -22,7 +22,7 @@ impl PrepositionType {
             "ki" => Some(PrepositionType::Using),
             "lo" => Some(PrepositionType::Location),
             "lu" => Some(PrepositionType::Metacommentary),
-            "sa" => Some(PrepositionType::Manner),
+            "we" => Some(PrepositionType::Manner),
             _ => None,
         }
     }
@@ -43,8 +43,8 @@ impl Natural for PrepositionType {
 
 #[derive(Clone, Debug)]
 pub struct Preposition {
-    preposition_type: PrepositionType,
-    content: ContentTree,
+    pub preposition_type: PrepositionType,
+    pub content: ContentTree,
 }
 
 impl Natural for Preposition {

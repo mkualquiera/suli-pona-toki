@@ -13,8 +13,8 @@ trait Upgrade<T> {
 
 #[derive(Debug)]
 pub struct Subject {
-    prepositions: Vec<Preposition>,
-    content: ContentTree,
+    pub prepositions: Vec<Preposition>,
+    pub content: ContentTree,
 }
 
 impl Natural for Subject {
@@ -81,8 +81,8 @@ impl SubjectParser {
 
 #[derive(Clone, Debug)]
 pub struct Object {
-    prepositions: Vec<Preposition>,
-    content: ContentTree,
+    pub prepositions: Vec<Preposition>,
+    pub content: ContentTree,
 }
 
 impl Natural for Object {
@@ -164,9 +164,9 @@ impl Upgrade<ObjectParser> for SubjectParser {
 
 #[derive(Debug)]
 pub struct Verb {
-    objects: Vec<Object>,
-    prepositions: Vec<Preposition>,
-    content: ContentTree,
+    pub objects: Vec<Object>,
+    pub prepositions: Vec<Preposition>,
+    pub content: ContentTree,
 }
 
 impl Natural for Verb {
@@ -231,7 +231,7 @@ impl Upgrade<VerbParser> for SubjectParser {
 }
 
 #[derive(Debug)]
-enum PredicateType {
+pub enum PredicateType {
     Verbed(Vec<Verb>),
     OrphanObjects(Vec<Object>),
 }
@@ -253,10 +253,10 @@ impl Natural for PredicateType {
 
 #[derive(Debug)]
 pub struct Sentence {
-    context: Option<Box<Sentence>>,
-    subject: Option<Subject>,
-    predicate: PredicateType,
-    apposition: Option<Box<Sentence>>,
+    pub context: Option<Box<Sentence>>,
+    pub subject: Option<Subject>,
+    pub predicate: PredicateType,
+    pub apposition: Option<Box<Sentence>>,
 }
 
 impl Natural for Sentence {

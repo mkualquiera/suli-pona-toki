@@ -109,10 +109,10 @@ impl ContentTreeParser {
     }
 
     pub fn feed_one(&mut self, token: TokenWithLocation) -> Result<(), ContentParseError> {
-        let data = if let Token::Plain(data) = &token.peek_inner() {
-            data
-        } else {
-            return Err(ContentParseError::NotPlainToken(token));
+        let data = match token.peek_inner() {
+            Token::Plain(data) => data,
+            Token::Comment(_) => return Ok(()), // Ignore comments
+            _ => return Err(ContentParseError::NotPlainToken(token)),
         };
 
         self.state = match data.as_str() {
@@ -157,9 +157,9 @@ impl ContentTreeParser {
                 } = self.state.clone()
                 {
                     ContentTree::Branch {
-                        branch_type: BranchType::InnerGlue,
+                        branch_type,
                         head: Box::new(ContentTree::Branch {
-                            branch_type,
+                            branch_type: BranchType::InnerGlue,
                             head: Box::new(ContentTree::Terminal),
                             tail: head,
                         }),
@@ -324,5 +324,15 @@ mod tests {
             parser.close(),
             Err(ContentParseError::InvalidTreeStructure(_))
         ));
+    }
+
+    #[test]
+    fn test_problematic() {
+        let mut tokenizer = TokenizationState::new();
+        let tokens = tokenizer.feed("nasa telo").unwrap();
+        let mut parser = ContentTreeParser::new();
+        parser.feed(tokens).unwrap();
+        let tree = parser.close().unwrap();
+        insta::assert_snapshot!(tree.as_natural());
     }
 }

@@ -2,8 +2,9 @@ use lazy_static::lazy_static;
 
 pub(super) const PREFIXES: [&str; 1] = ["an"];
 
-pub(super) const SUFFIXES: [&str; 10] =
-    ["su", "pa", "mo", "ta", "na", "ki", "lo", "un", "nu", "lu"];
+pub(super) const SUFFIXES: [&str; 11] = [
+    "su", "pa", "mo", "ta", "na", "ki", "lo", "un", "nu", "lu", "we",
+];
 
 pub(super) const SUFSUFFIXES: [&str; 1] = ["la"];
 

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Page Title</title>
+
+    <style>
+        @font-face {
+            font-family: 'SitelenTelo';
+            src: url('sitelen_telo_1.01.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        * {
+            font-family: 'SitelenTelo', Arial, sans-serif;
+            font-size: 40px;
+        }
+
+        /*
+        sentence:not([role])::after {
+            content: ".";
+        }
+            */
+
+        sentence[role="context"]::after {
+            content: "la";
+            font-size: 20px;
+        }
+
+        sentence[role="apposition"]::before {
+            content: ":";
+        }
+
+        verb::after {
+            content: "pali";
+            font-size: 20px;
+        }
+
+        subject::after {
+            content: "li";
+            font-size: 20px;
+        }
+
+        object::after {
+            content: "e";
+            font-size: 20px;
+        }
+
+        preposition[role="direction"]::after {
+            content: "tawa";
+            font-size: 20px;
+
+            vertical-align: super;
+        }
+
+        preposition[type="origin"]::after {
+            content: "tan";
+            font-size: 20px;
+
+            vertical-align: super;
+        }
+
+        preposition[type="using"]::after {
+            content: "kepeken";
+            font-size: 20px;
+
+            vertical-align: super;
+        }
+
+        preposition[type="location"]::after {
+            content: "lon";
+            font-size: 20px;
+
+            vertical-align: super;
+        }
+
+        preposition[type="metacommentary"]::after {
+            content: "pilin";
+            font-size: 20px;
+
+            vertical-align: super;
+        }
+
+        preposition[type="manner"]::after {
+            content: "sama";
+            font-size: 20px;
+
+            vertical-align: super;
+        }
+
+        union::after {
+            content: "en";
+            font-size: 20px;
+            vertical-align: super;
+        }
+
+        alternative::after {
+            content: "anu";
+            font-size: 20px;
+            vertical-align: super;
+        }
+
+        property {
+            border-bottom: 4px solid black;
+            border-right: 4px solid black;
+            box-sizing: border-box;
+            border-radius: 8px;
+            margin-right: 4px;
+        }
+
+        gluetail {
+            border-top: 4px solid black;
+            border-right: 4px solid black;
+            box-sizing: border-box;
+            border-radius: 8px;
+            margin-right: 4px;
+        }
+
+        gluehead {
+            border-top: 4px solid black;
+            border-left: 4px solid black;
+            box-sizing: border-box;
+            border-radius: 8px;
+        }
+
+        sentence,
+        verb,
+        object,
+        subject,
+        preposition,
+        property,
+        alternative,
+        union,
+        glue {
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    {{content}}
+</body>
+
+</html>
