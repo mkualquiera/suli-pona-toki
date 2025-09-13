@@ -1,5 +1,6 @@
 mod transpile;
 use clap::Parser;
+mod html;
 
 use std::fs::File;
 use std::io::{self, BufReader, BufWriter, Read, Write};

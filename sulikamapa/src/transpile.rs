@@ -10,6 +10,8 @@ use suli_pona_toki::{
     tokens::{TokenizationError, TokenizationState},
 };
 
+use crate::html::AsHtml;
+
 #[derive(Debug)]
 pub enum TranspileError {
     ReadError(std::io::Error),
@@ -150,12 +152,21 @@ pub fn transpile_stream(
                                 newline_state = NewlineState::None;
                             }
                         }
-                        let _ = write!(output, "[[Parsed sentence: {}]]", sentence.as_natural());
+                        //let _ = write!(output, "[[Parsed sentence: {}]]", sentence.as_natural());
+                        sentence
+                            .write_html(output, None)
+                            .map_err(TranspileError::WriteError)?;
                         sentence_parser = SentenceParser::new();
                     }
                 }
             }
         }
     }
+    tokenizer
+        .is_empty()
+        .map_err(TranspileError::TokenizationError)?;
+    sentence_parser
+        .is_empty()
+        .map_err(TranspileError::ParsingError)?;
     Ok(())
 }

@@ -1,0 +1,15 @@
+---
+source: sulikamapa/tests/cli_tests.rs
+expression: output
+---
+Ok(
+    Output {
+        status: ExitStatus(
+            unix_wait_status(
+                0,
+            ),
+        ),
+        stdout: "<preserved><p><sentence><verb><contentleaf>suli</contentleaf><contentleaf>kama</contentleaf></verb></sentence><sentence><subject><contentleaf>ona</contentleaf></subject><verb><preposition type=\"metacommentary\"><contentleaf>kin</contentleaf></preposition><contentleaf>pona</contentleaf></verb></sentence><br/><sentence><verb><contentleaf>suli</contentleaf><contentleaf>kama</contentleaf></verb></sentence></p><p><sentence><subject><contentleaf>linja</contentleaf><contentleaf>sin</contentleaf></subject></sentence></p></preserved>",
+        stderr: "",
+    },
+)
