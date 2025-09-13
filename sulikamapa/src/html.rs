@@ -7,14 +7,22 @@ use suli_pona_toki::{
     sentence::{Object, PredicateType, Sentence, Subject, Verb},
 };
 
+pub struct LeafState {
+    negated: bool,
+}
+
 impl AsHtml for LeafType {
-    type Context = ();
+    type Context = LeafState;
     fn write_html(
         &self,
         output: &mut dyn Write,
-        _context: Option<Self::Context>,
+        context: Option<Self::Context>,
     ) -> std::io::Result<()> {
-        write!(output, "<contentleaf>")?;
+        if context.expect("LeafState context is required").negated {
+            write!(output, "<contentleaf type=\"negated\">")?;
+        } else {
+            write!(output, "<contentleaf>")?;
+        }
         match self {
             LeafType::Literal(tokens) => {
                 write!(
@@ -49,9 +57,9 @@ impl AsHtml for ContentTree {
         _context: Option<Self::Context>,
     ) -> std::io::Result<()> {
         match self {
-            ContentTree::Terminal => unreachable!(),
-            ContentTree::Leaf(leaf) => {
-                leaf.write_html(output, None)?;
+            ContentTree::Terminal { .. } => unreachable!(),
+            ContentTree::Leaf { leaf_type, negated } => {
+                leaf_type.write_html(output, Some(LeafState { negated: *negated }))?;
             }
             ContentTree::Branch {
                 branch_type,

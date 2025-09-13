@@ -17,8 +17,8 @@ kinlu misu nimo ala kenpa: sinamo lukinpa.
 PA PU TO JAN jansu lukinpa.
 
 pona jansu lapeki tomota tawapa.
-tonsi jansu sina tomo mo mi lonlu ponapa.
-telo tomolo jansu leko mo tawa pa.
+tonsi jansu sina tomomo mi lonlu ponapa.
+telo tomolo jansu lekomo tawapa.
 
 lonlu, sinasu tokipala, sina tomolo misu tomota ponalu lukaki sitelennu ilomo sina tokiun sina lukinna tawapa.
 misu sinamo onamo ponapa tomomo lekomo pakalapa.
@@ -37,3 +37,54 @@ sijelolo lukamo lonpa.
 lukinsu sinpinta lonpa: nita osu.
 alu osu sewita lukinpa: alu osu lukinpa.
 ni suwi utala konsu mimo kamapa: ni konsu ni komo anjakipa: ni kosu mimo kon lukalo ante kamapa, mimo pona esun pi janta lape pilin pi jo jan pinilu kamapa.
+
+<h1>nasinun pona lipusu.</h1>
+
+<h2>wan lipusu.</h2>
+
+wan nasinmo toki kenpala, ni nasinsu lon nasinwe ala lonpa.
+wan nimimo nimi kenpala, ni nimisu lon nimiwe ala lonpa.
+
+ala nimi pi ijosu lon lonpa.
+nimi palisu ale wan ijomo lon kamapa.
+
+sinasu wilemo anjopala, sinasu ansona sona kamapa.
+sinasu wilemo jopala, sinasu kon sitelenmo tasolu lukinpa.
+
+tasolu, ansonaun kon sitelensu sama lon mana kamapa.
+ni lon masu ansuno nimipa. 
+
+ansunolo ansunosu.
+ale sonamo lupapa.
+
+<h2>tu lipusu.</h2>
+
+ijosu janta lukin ponapala, ante ijosu jaki lukin pi kamapa.
+ijosu janta ponapala, ante ijosu ike kamapa.
+
+lonun anlonsu ante ijomo sinpa.
+ikeun ponasu ante ijomo pona panapa.
+suliun lilisu ante ijomo nimipa.
+sewiun anpasu ante ijomo lonpa.
+monsiun sinpin ante ijomo pokapa.
+
+ni tanlu, sona jansu anpaliki palipa, antokiki sona panapa.
+ijosu lon kamapala, sona jansu ijota lon kenpa.
+ijosu weka kamapala, sona jansu ijota weka kenpa.
+sona jansu jopala, sona jansu ijomo awenpa.
+sona jansu palipala, sona jansu ala wilepa.
+palisu tenpolu pinipala, sona jansu palimo ansona kamapa.
+palisu ale tenpolo ni tanlu lonpa.
+
+<h3>wan tu lipusu.</h3>
+
+suli jansu sinata ike suli sulipala, ante jansu anwawa kamapa.
+laso kiwensu sinata mute manipala, jansu ike jo pi kamapa.
+unpa pilinsu sinata ale pilin pi kamapala, olinsu nasa kamapa.
+
+sona jansu ni nasinki nasin panapa: jan pilin pi insamo weka kamapa, sijelomo jo kamapa.
+jo wile pi pilinmo anwawa kamapa, wawa pilinmo kinlu kiwen kamapa.
+sona jansu nimo pali panapa: jansu ale sonamo ale wilemo anjopa.
+sona jansu anlon sona pi janta nasa panapa.
+
+osu anpali palipala, alesu pona kamapa.

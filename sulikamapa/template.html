@@ -19,15 +19,33 @@
             font-size: 40px;
         }
 
-        /*
-        sentence:not([role])::after {
-            content: ".";
+        /* Shared semantic marker styles */
+        sentence[role="context"]::after,
+        verb::after,
+        subject::after,
+        object::after,
+        preposition[role="direction"]::after,
+        preposition[type="origin"]::after,
+        preposition[type="using"]::after,
+        preposition[type="location"]::after,
+        preposition[type="metacommentary"]::after,
+        preposition[type="manner"]::after,
+        union::after,
+        alternative::after,
+        contentleaf[type="negated"]::before {
+            font-size: 0.5em;
+            font-weight: 900;
+            vertical-align: super;
+            margin-left: -0.15em;
         }
-            */
 
+        contentleaf[type="negated"]::before {
+            margin-left: 0;
+        }
+
+        /* Content-specific markers */
         sentence[role="context"]::after {
             content: "la";
-            font-size: 20px;
         }
 
         sentence[role="apposition"]::before {
@@ -36,94 +54,83 @@
 
         verb::after {
             content: "pali";
-            font-size: 20px;
         }
 
         subject::after {
             content: "li";
-            font-size: 20px;
         }
 
         object::after {
             content: "e";
-            font-size: 20px;
         }
 
         preposition[role="direction"]::after {
             content: "tawa";
-            font-size: 20px;
-
-            vertical-align: super;
         }
 
         preposition[type="origin"]::after {
             content: "tan";
-            font-size: 20px;
-
-            vertical-align: super;
         }
 
         preposition[type="using"]::after {
             content: "kepeken";
-            font-size: 20px;
-
-            vertical-align: super;
         }
 
         preposition[type="location"]::after {
             content: "lon";
-            font-size: 20px;
-
-            vertical-align: super;
         }
 
         preposition[type="metacommentary"]::after {
             content: "pilin";
-            font-size: 20px;
-
-            vertical-align: super;
         }
 
         preposition[type="manner"]::after {
             content: "sama";
-            font-size: 20px;
-
-            vertical-align: super;
         }
 
         union::after {
             content: "en";
-            font-size: 20px;
-            vertical-align: super;
         }
 
         alternative::after {
             content: "anu";
-            font-size: 20px;
-            vertical-align: super;
         }
 
+        contentleaf[type="negated"]::before {
+            content: "ala";
+        }
+
+        /* Shared border styles */
+        property,
+        gluetail,
+        gluehead {
+            border-width: 0.1em;
+            border-style: solid;
+            border-color: black;
+            border-radius: 0.2em;
+            margin-right: 0.2em;
+        }
+
+        /* Specific border configurations */
         property {
-            border-bottom: 4px solid black;
-            border-right: 4px solid black;
-            box-sizing: border-box;
-            border-radius: 8px;
-            margin-right: 4px;
+            border-top: none;
+            border-left: none;
         }
 
         gluetail {
-            border-top: 4px solid black;
-            border-right: 4px solid black;
-            box-sizing: border-box;
-            border-radius: 8px;
-            margin-right: 4px;
+            border-bottom: none;
+            border-left: none;
         }
 
         gluehead {
-            border-top: 4px solid black;
-            border-left: 4px solid black;
-            box-sizing: border-box;
-            border-radius: 8px;
+            border-bottom: none;
+            border-right: none;
+        }
+
+        verb::after,
+        object::after,
+        subject::after {
+            vertical-align: baseline;
         }
 
         sentence,
