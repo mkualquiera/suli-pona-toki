@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>suli pona toki: A Comprehensive Visual Guide</title>
+    <style>
+        @font-face {
+            font-family: 'SitelenTelo';
+            src: url('sulikamapa/sitelen_telo_1.01.otf') format('opentype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        /* Base fonts - NOT sitelen for general text */
+        :root {
+            --serif-font: "Libre Baskerville", "Baskerville", "Garamond", "Times New Roman", serif;
+            --sans-font: "Cormorant Garamond", "Palatino", "Book Antiqua", Georgia, serif;
+            --mono-font: "Courier Prime", "Courier New", monospace;
+        }
+
+        body {
+            font-family: var(--serif-font);
+            line-height: 1.6;
+            color: #2d3142;
+            background-color: #f8f8fa;
+            margin: 0;
+            padding: 0;
+            letter-spacing: 0.01em;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem;
+            background-color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Typography */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--sans-font);
+            font-weight: 600;
+            color: #1c1e2a;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            border-bottom: 2px solid #d1b978;
+            padding-bottom: 0.5rem;
+        }
+
+        h2 {
+            font-size: 1.8rem;
+            color: #1c1e2a;
+            margin-top: 2.5rem;
+            margin-bottom: 1.25rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid #d1b978;
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            color: #2d3142;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        p {
+            margin-bottom: 1.25rem;
+            text-align: justify;
+        }
+
+        /* ONLY apply SitelenTelo to language examples */
+        .suli-pona-toki {
+            font-family: 'SitelenTelo', Arial, sans-serif !important;
+            /* Preserve ligatures - these are crucial for sitelen telo */
+            font-variant-ligatures: normal;
+            font-feature-settings: "liga" 1, "clig" 1;
+            /* Remove properties that break ligatures */
+            letter-spacing: normal !important;
+            word-spacing: normal !important;
+            text-transform: none !important;
+        }
+
+        /* Particle highlighting */
+        .particle-highlight {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 0.1em 0.2em;
+            border-radius: 0.2em;
+            font-weight: 600;
+        }
+
+        .particle-latin {
+            background-color: #d4e6f1;
+            color: #1b4f72;
+            padding: 0.1em 0.2em;
+            border-radius: 0.2em;
+            font-weight: 600;
+        }
+
+        .particle-sitelen {
+            background-color: #fdeaa7;
+            color: #7c5502;
+            padding: 0.1em 0.2em;
+            border-radius: 0.2em;
+            font-weight: 600;
+        }
+
+        /* Exercise boxes */
+        .exercise {
+            background-color: #e8f5e8;
+            border: 1px solid #c3e6c3;
+            border-radius: 0.25rem;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .exercise-header {
+            background-color: #28a745;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-family: var(--sans-font);
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin: -1.5rem -1.5rem 1rem -1.5rem;
+            border-radius: 0.25rem 0.25rem 0 0;
+        }
+
+        .exercise-question {
+            font-weight: 600;
+            color: #155724;
+            margin-bottom: 0.5rem;
+        }
+
+        .exercise-answer {
+            font-style: italic;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+            padding: 0.5rem;
+            background-color: #f8f9fa;
+            border-radius: 0.2rem;
+            border-left: 3px solid #28a745;
+        }
+
+        /* Example containers */
+        .example {
+            background-color: #f8f8fa;
+            border-radius: 0.25rem;
+            border: 1px solid #e2e2e8;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .example-header {
+            background-color: #2d3142;
+            color: white;
+            padding: 0.5rem 1rem;
+            font-family: var(--sans-font);
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .example-content {
+            padding: 1rem;
+        }
+
+        .example-row {
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dotted #e2e2e8;
+        }
+
+        .example-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .example-label {
+            font-family: var(--sans-font);
+            font-size: 0.8rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .latin-text {
+            font-family: var(--mono-font);
+            background-color: #f1f1f3;
+            padding: 0.5rem;
+            border-radius: 0.2rem;
+            border-left: 3px solid #d1b978;
+            margin-bottom: 0.5rem;
+        }
+
+        .sitelen-text {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            /* Ensure no properties that break ligatures */
+            letter-spacing: normal;
+            word-spacing: normal;
+            text-transform: none;
+        }
+
+        .explanation {
+            font-style: italic;
+            color: #5a5d6e;
+            font-size: 0.95rem;
+        }
+
+        /* Import all the semantic styling from base.css but scoped to .suli-pona-toki */
+        .suli-pona-toki sentence[role="context"]::after,
+        .suli-pona-toki verb::after,
+        .suli-pona-toki subject::after,
+        .suli-pona-toki object::after,
+        .suli-pona-toki preposition[type="direction"]::after,
+        .suli-pona-toki preposition[type="origin"]::after,
+        .suli-pona-toki preposition[type="using"]::after,
+        .suli-pona-toki preposition[type="location"]::after,
+        .suli-pona-toki preposition[type="metacommentary"]::after,
+        .suli-pona-toki preposition[type="manner"]::after,
+        .suli-pona-toki union::after,
+        .suli-pona-toki alternative::after,
+        .suli-pona-toki contentleaf[type="negated"]::before {
+            font-size: 0.5em;
+            font-weight: 900;
+            vertical-align: super;
+            margin-left: -0.15em;
+        }
+
+        .suli-pona-toki contentleaf[type="negated"]::before {
+            margin-left: 0;
+        }
+
+        /* Content-specific markers */
+        .suli-pona-toki sentence[role="context"]::after {
+            content: "la";
+        }
+
+        .suli-pona-toki sentence[role="apposition"]::before {
+            content: ":";
+        }
+
+        .suli-pona-toki verb::after {
+            content: "pali";
+        }
+
+        .suli-pona-toki subject::after {
+            content: "li";
+        }
+
+        .suli-pona-toki object::after {
+            content: "e";
+        }
+
+        .suli-pona-toki preposition[type="direction"]::after {
+            content: "tawa";
+        }
+
+        .suli-pona-toki preposition[type="origin"]::after {
+            content: "tan";
+        }
+
+        .suli-pona-toki preposition[type="using"]::after {
+            content: "kepeken";
+        }
+
+        .suli-pona-toki preposition[type="location"]::after {
+            content: "lon";
+        }
+
+        .suli-pona-toki preposition[type="metacommentary"]::after {
+            content: "pilin";
+        }
+
+        .suli-pona-toki preposition[type="manner"]::after {
+            content: "sama";
+        }
+
+        .suli-pona-toki union::after {
+            content: "en";
+        }
+
+        .suli-pona-toki alternative::after {
+            content: "anu";
+        }
+
+        .suli-pona-toki contentleaf[type="negated"]::before {
+            content: "ala";
+        }
+
+        /* Shared border styles */
+        .suli-pona-toki property,
+        .suli-pona-toki gluetail,
+        .suli-pona-toki gluehead {
+            border-width: 0.1em;
+            border-style: solid;
+            border-color: currentColor;
+            border-radius: 0.2em;
+            margin-right: 0.2em;
+            box-sizing: border-box;
+            padding-top: -0.2em;
+            padding-bottom: -0.2em;
+        }
+
+        /* Specific border configurations */
+        .suli-pona-toki property {
+            border-top: none;
+            border-left: none;
+        }
+
+        .suli-pona-toki gluetail {
+            border-bottom: none;
+            border-left: none;
+        }
+
+        .suli-pona-toki gluehead {
+            border-bottom: none;
+            border-right: none;
+        }
+
+        .suli-pona-toki verb::after,
+        .suli-pona-toki object::after,
+        .suli-pona-toki subject::after {
+            vertical-align: baseline;
+        }
+
+        .suli-pona-toki sentence,
+        .suli-pona-toki verb,
+        .suli-pona-toki object,
+        .suli-pona-toki subject,
+        .suli-pona-toki preposition,
+        .suli-pona-toki property,
+        .suli-pona-toki alternative,
+        .suli-pona-toki union,
+        .suli-pona-toki glue {
+            display: inline-block;
+        }
+
+        /* Table of contents */
+        .toc {
+            background-color: #f1f1f3;
+            border: 1px solid #d1d1dc;
+            border-radius: 0.25rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .toc h3 {
+            margin-top: 0;
+            color: #2d3142;
+        }
+
+        .toc ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .toc li {
+            margin-bottom: 0.5rem;
+            padding-left: 1rem;
+        }
+
+        .toc li:before {
+            content: "§";
+            color: #d1b978;
+            font-weight: bold;
+            margin-left: -1rem;
+            margin-right: 0.5rem;
+        }
+
+        .toc a {
+            color: #2d3142;
+            text-decoration: none;
+        }
+
+        .toc a:hover {
+            color: #d1b978;
+        }
+
+        /* Lists */
+        ul {
+            list-style-type: none;
+            padding-left: 1.5rem;
+            margin: 1.25rem 0;
+        }
+
+        ul li {
+            margin-bottom: 0.7rem;
+            position: relative;
+            padding-left: 1rem;
+        }
+
+        ul li:before {
+            content: "•";
+            color: #d1b978;
+            font-weight: bold;
+            display: inline-block;
+            width: 1rem;
+            margin-left: -1rem;
+            position: absolute;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>suli pona toki</h1>
+        <p style="text-align: center; font-style: italic; color: #666;">A Comprehensive Visual Guide</p>
+
+        <div class="toc">
+            <h3>Contents</h3>
+            <ul>
+                <li><a href="#introduction">1. Introduction</a></li>
+                <li><a href="#basic-particles">2. Basic Particles</a></li>
+                <li><a href="#prepositions">3. Prepositions</a></li>
+                <li><a href="#advanced-particles">4. Advanced Particles</a></li>
+                <li><a href="#modifiers">5. Modifier Structure</a></li>
+                <li><a href="#prefix">6. The "an-" Prefix</a></li>
+                <li><a href="#writing-system">7. Writing System (sitelen telo)</a></li>
+                <li><a href="#examples">8. Practice & Examples</a></li>
+            </ul>
+        </div>
+
+        <h2 id="introduction">1. Introduction</h2>
+        <p>
+            <strong>suli pona toki</strong> is a dialect of toki pona inspired by Japanese
+            sentence structure and Forth-like stack-based processing. Instead of using word order and
+            context like regular toki pona, everything is expressed through <strong>suffix particles</strong>
+            that you attach to words.
+        </p>
+
+        <p>
+            Think of it this way: instead of saying "mi lukin e tomo" (I see house), you say 
+            "mi<span class="particle-latin">su</span> tomo<span class="particle-latin">mo</span> lukin<span class="particle-latin">pa</span>" 
+            (I-SUBJECT house-OBJECT see-VERB).
+        </p>
+
+        <h3>What Makes This Different</h3>
+        <ul>
+            <li><strong>Particles do all the grammar work:</strong> No ambiguity about what's a subject vs. object</li>
+            <li><strong>Word order is flexible:</strong> You can move things around for emphasis</li>
+            <li><strong>Head-final structure:</strong> Modifiers come before what they modify</li>
+            <li><strong>Subject-Object-Verb pattern:</strong> The verb comes last</li>
+        </ul>
+
+        <p>
+            Don't worry if this sounds complex! We'll build it up step by step, starting with the most basic particles.
+        </p>
+
+        <h2 id="basic-particles">2. Basic Particles</h2>
+        <p>
+            Every sentence in suli pona toki is built from three core particles that you attach as suffixes to words. 
+            Let's start with these fundamentals:
+        </p>
+
+        <h3>The Essential Three</h3>
+        <div class="example">
+            <div class="example-header">Core Particle Suffixes</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Subject Marker</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> = "person (as subject)"</div>
+                    <div class="explanation">Add <strong>-su</strong> to mark who/what does the action</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Object Marker</div>
+                    <div class="latin-text">tomo<span class="particle-latin">mo</span> = "house (as object)"</div>
+                    <div class="explanation">Add <strong>-mo</strong> to mark who/what receives the action</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Verb Marker</div>
+                    <div class="latin-text">lukin<span class="particle-latin">pa</span> = "see (as action)"</div>
+                    <div class="explanation">Add <strong>-pa</strong> to mark the action itself</div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Your First Sentence</h3>
+        <p>Let's build a simple sentence step by step:</p>
+
+        <div class="example">
+            <div class="example-header">Building: "The person sees the house"</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Step 1: Who does it?</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span></div>
+                    <div class="explanation">person-SUBJECT</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Step 2: What receives it?</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> tomo<span class="particle-latin">mo</span></div>
+                    <div class="explanation">person-SUBJECT house-OBJECT</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Step 3: What action happens?</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> tomo<span class="particle-latin">mo</span> lukin<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">person-SUBJECT house-OBJECT see-VERB = "The person sees the house."</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-header">Practice Exercise 1</div>
+            <div class="exercise-question">How would you write "I eat food" using particles?</div>
+            <div class="exercise-answer">
+                <strong>Answer:</strong> mi<span class="particle-latin">su</span> moku<span class="particle-latin">mo</span> moku<span class="particle-latin">pa</span>.<br>
+                <em>Explanation:</em> mi-SUBJECT moku-OBJECT moku-VERB (I-SUBJECT food-OBJECT eat-VERB)
+            </div>
+        </div>
+
+        <h3>Word Order Rules</h3>
+        <p>
+            The word order is actually quite structured: <strong>Subject → Object(s) → Verb</strong>. 
+            This is because each object applies to the next verb, allowing for complex sentences:
+        </p>
+
+        <div class="example">
+            <div class="example-header">Word Order Pattern</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Simple (SOV)</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> tomo<span class="particle-latin">mo</span> lukin<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">Subject-Object-Verb: "The person sees the house"</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Multiple Objects (SOOV)</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> tomo<span class="particle-latin">mo</span> lupa<span class="particle-latin">mo</span> lukin<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">"The person sees the house and the door"</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Multiple Verbs (SOVOV)</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> tomo<span class="particle-latin">mo</span> lukin<span class="particle-latin">pa</span> lupa<span class="particle-latin">mo</span> open<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">"The person sees the house and opens the door"</div>
+                </div>
+            </div>
+        </div>
+
+        <h2 id="prepositions">3. Prepositions</h2>
+        <p>
+            Now that you know the basic sentence structure, let's add detail with prepositions. 
+            These show relationships like location, direction, and method. The key insight: 
+            <strong>prepositions can attach to any grammatical element and go anywhere in the sentence</strong>.
+        </p>
+
+        <h3>The Six Preposition Suffixes</h3>
+        <div class="example">
+            <div class="example-header">Preposition Particles</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Direction/Toward</div>
+                    <div class="latin-text">tomo<span class="particle-latin">ta</span> = "to/toward the house"</div>
+                    <div class="explanation">Add <strong>-ta</strong> (from "tawa")</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Origin/From</div>
+                    <div class="latin-text">tomo<span class="particle-latin">na</span> = "from the house"</div>
+                    <div class="explanation">Add <strong>-na</strong> (from "tan")</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Location/At</div>
+                    <div class="latin-text">tomo<span class="particle-latin">lo</span> = "at the house"</div>
+                    <div class="explanation">Add <strong>-lo</strong> (from "lon")</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Using/With</div>
+                    <div class="latin-text">ilo<span class="particle-latin">ki</span> = "using/with a tool"</div>
+                    <div class="explanation">Add <strong>-ki</strong> (from "kepeken")</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Manner/Like</div>
+                    <div class="latin-text">jan<span class="particle-latin">we</span> = "like a person"</div>
+                    <div class="explanation">Add <strong>-we</strong> (manner/similarity)</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Metacommentary</div>
+                    <div class="latin-text">mi lon<span class="particle-latin">lu</span> = "honestly" (lit: "from my truth")</div>
+                    <div class="explanation">Add <strong>-lu</strong> (speaker's perspective)</div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Prepositions Can Attach Anywhere</h3>
+        <p>
+            Unlike the strict S-O-V order, prepositions can move around to attach to different 
+            parts of the sentence. This creates different meanings:
+        </p>
+
+        <div class="example">
+            <div class="example-header">Flexible Preposition Placement</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Prepositional Subject</div>
+                    <div class="latin-text">tomo<span class="particle-latin">lo</span> jan<span class="particle-latin">su</span> leko<span class="particle-latin">mo</span> tawa<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">"The person at the house moves the box."</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Prepositional Verb</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> leko<span class="particle-latin">mo</span> tomo<span class="particle-latin">lo</span> tawa<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">"The person moves the box at the house."</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Prepositional Object</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> tomo<span class="particle-latin">lo</span> leko<span class="particle-latin">mo</span> tawa<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">"The person moves the box that's at the house."</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-header">Practice Exercise 2</div>
+            <div class="exercise-question">How would you say "I walk to the store using my feet"?</div>
+            <div class="exercise-answer">
+                <strong>Answer:</strong> mi<span class="particle-latin">su</span> esun<span class="particle-latin">ta</span> noka mi<span class="particle-latin">ki</span> tawa<span class="particle-latin">pa</span>.<br>
+                <em>Explanation:</em> I-SUBJECT to-store my-feet-WITH walk-VERB
+            </div>
+        </div>
+
+        <h2 id="advanced-particles">4. Advanced Particles</h2>
+        <p>
+            Now let's learn about particles that connect ideas and add logical relationships.
+        </p>
+
+        <h3>Logical Connectors</h3>
+        <div class="example">
+            <div class="example-header">Union and Alternative Particles</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Union (and)</div>
+                    <div class="latin-text">mi<span class="particle-latin">un</span> sina<span class="particle-latin">su</span> = "you and I"</div>
+                    <div class="explanation">Add <strong>-un</strong> to connect things with "and"</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Alternative (or)</div>
+                    <div class="latin-text">mi<span class="particle-latin">nu</span> sina = "me or you"</div>
+                    <div class="explanation">Add <strong>-nu</strong> to show alternatives with "or"</div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Context and Apposition</h3>
+        <div class="example">
+            <div class="example-header">Sentence Connectors</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Context Setting</div>
+                    <div class="latin-text">tenpo pini<span class="particle-latin">la</span>, jan<span class="particle-latin">su</span> tawa<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">"In the past, the person went." (-la sets context)</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Explanation</div>
+                    <div class="latin-text">jan<span class="particle-latin">su</span> pona<span class="particle-latin">pa</span>: ni pona<span class="particle-latin">pa</span>.</div>
+                    <div class="explanation">"The person is good: this is good." (colon for explanation)</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-header">Practice Exercise 3</div>
+            <div class="exercise-question">How would you say "When it's dark, you or I will sleep"?</div>
+            <div class="exercise-answer">
+                <strong>Answer:</strong> pimeja<span class="particle-latin">la</span>, mi<span class="particle-latin">nu</span> sina<span class="particle-latin">su</span> lape<span class="particle-latin">pa</span>.<br>
+                <em>Explanation:</em> dark-CONTEXT, me-OR you-SUBJECT sleep-VERB
+            </div>
+        </div>
+
+        <h2 id="modifiers">5. Modifier Structure</h2>
+        <p>
+            suli pona toki uses a <strong>head-final</strong> structure where modifiers come before 
+            what they modify. We also have special particles "pi" and "no" to group complex ideas.
+        </p>
+
+        <h3>Simple Modification</h3>
+        <div class="example">
+            <div class="example-header">Basic Modifier Order</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Single Modifier</div>
+                    <div class="latin-text">pona jan<span class="particle-latin">su</span> = "good person (as subject)"</div>
+                    <div class="explanation">Modifier comes before the word it modifies</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Multiple Modifiers</div>
+                    <div class="latin-text">suli pona jan<span class="particle-latin">su</span> = "big good person"</div>
+                    <div class="explanation">All modifiers come before, closest to the head is most important</div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Property Grouping with "pi"</h3>
+        <p>
+            The word "pi" creates nested semantic units - like nested parentheses. Each "pi" 
+            creates a new grouping level, building complex hierarchical structures:
+        </p>
+
+        <div class="example">
+            <div class="example-header">Nested "pi" Structure</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Latin Script</div>
+                    <div class="latin-text">nasa telo pi ike jan pi suli telo<span class="particle-latin">su</span>.</div>
+                    <div class="example-label">Sitelen Rendering</div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <p><sentence><subject><property><property><contentleaf>nasa</contentleaf><contentleaf>telo</contentleaf></property><contentleaf>ike</contentleaf><contentleaf>jan</contentleaf></property><contentleaf>suli</contentleaf><contentleaf>telo</contentleaf></subject></sentence>
+                    </div>
+                    <div class="explanation">((crazy water) bad person) big liquid = "The person who deals with crazy water and bad people, who is associated with big liquids"</div>
+                </div>
+            </div>
+        </div>
+
+        <h3>Possessive Restructuring with "no"</h3>
+        <p>
+            The word "no" is different from "pi" - it creates possessive/attributive relationships 
+            that restructure the semantic hierarchy, like different types of parentheses:
+        </p>
+
+        <div class="example">
+            <div class="example-header">"pi" vs "no" Comparison</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">With "pi" (nested grouping)</div>
+                    <div class="latin-text">nasa telo pi ike jan pi suli telo<span class="particle-latin">su</span>.</div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <p><sentence><subject><property><property><contentleaf>nasa</contentleaf><contentleaf>telo</contentleaf></property><contentleaf>ike</contentleaf><contentleaf>jan</contentleaf></property><contentleaf>suli</contentleaf><contentleaf>telo</contentleaf></subject></sentence>
+                    </div>
+                    <div class="explanation">Nested properties: ((crazy water) bad person) big liquid</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">With "no" (possessive restructuring)</div>
+                    <div class="latin-text">nasa telo pi ike jan no suli tomo<span class="particle-latin">su</span>.</div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <p><sentence><subject><property><contentleaf>nasa</contentleaf><contentleaf>telo</contentleaf></property><glue><gluetail><contentleaf>ike</contentleaf><contentleaf>jan</contentleaf></gluetail><gluehead><contentleaf>suli</contentleaf><contentleaf>tomo</contentleaf></gluehead></glue></subject></sentence>
+                    </div>
+                    <div class="explanation">Possessive structure: (crazy water) of (bad person's big house)</div>
+                </div>
+            </div>
+        </div>
+
+        <p>
+            Notice how the sitelen telo rendering makes this crystal clear: "pi" creates nested 
+            <strong>property boxes</strong>, while "no" creates <strong>glue structures</strong> 
+            showing possession/attribution relationships.
+        </p>
+
+        <h2 id="prefix">6. The "an-" Prefix</h2>
+        <p>
+            The "an-" prefix creates true opposites - not just negation, but actual opposite concepts. 
+            This is different from saying something is "not good" (ala pona) versus saying it's "bad" (anpona).
+        </p>
+
+        <div class="example">
+            <div class="example-header">Common Opposites</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Good → Bad</div>
+                    <div class="latin-text">pona → <span class="particle-latin">an</span>pona</div>
+                    <div class="explanation">good → bad (not just "not good")</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Big → Small</div>
+                    <div class="latin-text">suli → <span class="particle-latin">an</span>suli</div>
+                    <div class="explanation">big → small</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Light → Dark</div>
+                    <div class="latin-text">suno → <span class="particle-latin">an</span>suno</div>
+                    <div class="explanation">light → dark</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-header">Practice Exercise 4</div>
+            <div class="exercise-question">What's the difference between "ala pona" and "anpona"?</div>
+            <div class="exercise-answer">
+                <strong>Answer:</strong> "ala pona" = "not good" (neutral, could be mediocre)<br>
+                "anpona" = "bad" (actively negative, the opposite of good)
+            </div>
+        </div>
+
+        <h2 id="writing-system">7. Writing System (sitelen telo)</h2>
+        <p>
+            suli pona toki uses <strong>sitelen telo</strong>, a logographic writing system for toki pona created by olb. 
+            The system combines word glyphs with semantic indicators that show grammatical relationships visually.
+        </p>
+
+        <h3>Font and Resources</h3>
+        <p>
+            The recommended font is <strong>sitelen telo</strong>, available from 
+            <a href="https://sona.pona.la/wiki/sitelen_telo">sona.pona.la/wiki/sitelen_telo</a>. 
+            This font includes proper ligature support which is essential for correct rendering.
+        </p>
+
+        <h3>How Particles Appear in sitelen telo</h3>
+        <p>
+            In sitelen telo, the particles we've learned show up as small markers. Here's how 
+            Latin script maps to sitelen rendering:
+        </p>
+
+        <div class="example">
+            <div class="example-header">Particle Mapping</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Subject: jan<span class="particle-latin">su</span></div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <sentence><subject><contentleaf>jan</contentleaf></subject></sentence>
+                    </div>
+                    <div class="explanation">Content + <span class="particle-sitelen">li</span> marker</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Verb: pona<span class="particle-latin">pa</span></div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <sentence><verb><contentleaf>pona</contentleaf></verb></sentence>
+                    </div>
+                    <div class="explanation">Content + <span class="particle-sitelen">pali</span> marker</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Object: tomo<span class="particle-latin">mo</span></div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <sentence><verb><object><contentleaf>tomo</contentleaf></object></verb></sentence>
+                    </div>
+                    <div class="explanation">Content + <span class="particle-sitelen">e</span> marker</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Direction: tomo<span class="particle-latin">ta</span></div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <preposition type="direction"><contentleaf>tomo</contentleaf></preposition>
+                    </div>
+                    <div class="explanation">Content + <span class="particle-sitelen">tawa</span> marker</div>
+                </div>
+                <div class="example-row">
+                    <div class="example-label">Negation: <span class="particle-latin">an</span>pona</div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <contentleaf type="negated">pona</contentleaf>
+                    </div>
+                    <div class="explanation"><span class="particle-sitelen">ala</span> marker + content</div>
+                </div>
+            </div>
+        </div>
+
+        <p>
+            <strong>Note:</strong> Proper ligature support is crucial for sitelen telo rendering. 
+            If the text appears broken or disconnected, ensure your browser supports OpenType ligatures 
+            and that the correct sitelen telo font is installed.
+        </p>
+
+        <h2 id="examples">8. Practice & Examples</h2>
+        <p>
+            Let's put it all together with some practice exercises and real examples from suli pona toki texts.
+        </p>
+
+        <div class="exercise">
+            <div class="exercise-header">Translation Practice</div>
+            <div class="exercise-question">Translate to suli pona toki: "The bad person quickly destroys my small house."</div>
+            <div class="exercise-answer">
+                <strong>Answer:</strong> anpona jan<span class="particle-latin">su</span> mi ansuli tomo<span class="particle-latin">mo</span> wawa<span class="particle-latin">we</span> pakala<span class="particle-latin">pa</span>.<br>
+                <em>Breakdown:</em> bad person-SUBJECT my small house-OBJECT strongly-MANNER destroy-VERB
+            </div>
+        </div>
+
+        <div class="example">
+            <div class="example-header">Complex Example from Test Text</div>
+            <div class="example-content">
+                <div class="example-row">
+                    <div class="example-label">Latin Script</div>
+                    <div class="latin-text">tonsi jan<span class="particle-latin">su</span> sina tomo<span class="particle-latin">mo</span> mi lon<span class="particle-latin">lu</span> pona<span class="particle-latin">pa</span>.</div>
+                    <div class="example-label">Sitelen Rendering</div>
+                    <div class="sitelen-text suli-pona-toki">
+                        <p><sentence><subject><contentleaf>tonsi</contentleaf><contentleaf>jan</contentleaf></subject><verb><object><contentleaf>sina</contentleaf><contentleaf>tomo</contentleaf></object><preposition type="metacommentary"><contentleaf>mi</contentleaf><contentleaf>lon</contentleaf></preposition><contentleaf>pona</contentleaf></verb></sentence>
+                    </div>
+                    <div class="explanation">"The non-binary person, honestly, improves your house."</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="exercise">
+            <div class="exercise-header">Final Challenge</div>
+            <div class="exercise-question">What does this mean? "nasa telo pi ike jan no suli tomopa"</div>
+            <div class="exercise-answer">
+                <strong>Answer:</strong> "The big bar/restaurant owned by the villain who brews alcohol."<br>
+                <em>Breakdown:</em> (crazy water) of (bad person) 's (big building) serves/provides
+            </div>
+        </div>
+
+        <h3>Congratulations!</h3>
+        <p>
+            You now understand the core grammar of suli pona toki. Remember:
+        </p>
+        <ul>
+            <li>Particles do all the grammatical work</li>
+            <li>Word order is Subject-Object(s)-Verb</li>
+            <li>Prepositions can attach anywhere for different meanings</li>
+            <li>Modifiers come before what they modify</li>
+            <li>Use "pi" and "no" for complex groupings</li>
+            <li>The "an-" prefix creates true opposites</li>
+        </ul>
+
+        <p>
+            Keep practicing, and soon you'll be fluent in this beautifully systematic language!
+        </p>
+    </div>
+</body>
+</html>
